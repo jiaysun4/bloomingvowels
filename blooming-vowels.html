@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blooming Vowels</title>
+
+  <style>
+    :root {
+      --bg: #f6f1e8;
+      --sage-green: #93a681;
+      --gold-border: #c98e64;
+      --clay: #ba8258;
+      --fence-brown: #936938;
+      --fence-light: #b0895e;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Helvetica Neue", Arial, sans-serif;
+      --frame-line: #cfc9c0;
+      --soft-line: #ddd3c3;
+      --text: #5f6556;
+      --lawn:      #9aac92;
+      --lawn-mid:  #899b82;
+      --lawn-dark: #788a72;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: var(--sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════ */
+    .header-section {
+      position: relative;
+      min-height: 56vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 62px 20px 92px;
+      border-bottom: 1px solid var(--soft-line);
+      overflow: visible;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 70% 55% at 50% 0%, rgba(255,255,255,.92), rgba(255,255,255,0) 70%),
+        radial-gradient(ellipse 40% 30% at 20% 100%, rgba(193,175,138,.15), transparent 60%),
+        radial-gradient(ellipse 40% 30% at 80% 100%, rgba(193,175,138,.15), transparent 60%);
+      background-size: auto, auto, auto;
+      background-repeat: no-repeat, no-repeat, no-repeat;
+    }
+    .header-section h1 {
+      position: relative; z-index: 2;
+      max-width: 920px;
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      color: var(--sage-green);
+      line-height: 1.15; letter-spacing: 1px; font-weight: 400;
+      padding: 0 16px;
+    }
+    .header-section h1 .accent { color: var(--gold-border); }
+
+    .botanical-corner {
+      position: absolute; bottom: 0;
+      width: min(27vw, 290px); opacity: .90; z-index: 1;
+      transform-origin: bottom center;
+      animation: plantSway 8s ease-in-out infinite;
+      will-change: transform;
+    }
+    .botanical-corner.left { left: -26px; }
+    .botanical-corner.right { right: 1cm; transform: scaleX(-1); animation-delay: -3s; }
+    .botanical-corner svg { width: 100%; height: auto; display: block; overflow: visible; }
+    @keyframes plantSway {
+      0%,100% { transform: rotate(0deg) translateY(0); }
+      50%      { transform: rotate(1.4deg) translateY(-4px); }
+    }
+
+    /* ── Decorative ornament row — above Garden of Period Blooms title ── */
+    .title-ornament {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; margin-bottom: 16px;
+    }
+    .title-ornament-line {
+      height: 1px;
+      width: clamp(48px, 10vw, 120px);
+      background: linear-gradient(90deg, transparent, var(--frame-line));
+    }
+    .title-ornament-line.right {
+      background: linear-gradient(90deg, var(--frame-line), transparent);
+    }
+    .title-ornament svg { width: 24px; height: 24px; opacity: .6; }
+
+    /* ══════════════════════════════════════
+       SHARED
+    ══════════════════════════════════════ */
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.45rem);
+      font-weight: 400; margin-bottom: 10px;
+      text-align: center; letter-spacing: .3px; line-height: 1.18;
+    }
+    .section-subtitle {
+      max-width: 820px; margin: 0 auto 40px;
+      font-size: .9rem; color: #948f86;
+      text-align: center; line-height: 1.55;
+    }
+
+    /* ══════════════════════════════════════
+       POT / TIMELINE SECTION
+    ══════════════════════════════════════ */
+    .timeline-container { max-width: 1000px; margin: 0 auto; text-align: center; padding: 0 20px; }
+    .pot-section { padding: 100px 20px; background: #fdfaf5; }
+    .pot-layout-container { max-width: 1180px; margin: 0 auto; text-align: center; }
+
+    .era-layout {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 1px 250px;
+      gap: 34px; align-items: center; margin-bottom: 34px;
+    }
+    .main-view-wrap {
+      display: flex; justify-content: flex-start; align-items: center;
+      min-height: 560px; padding-left: 10px;
+    }
+    .spline-viewer-shell {
+      width: min(680px,100%); height: 560px;
+      overflow: hidden; background: transparent; margin-left: 170px;
+    }
+    spline-viewer { width: 100%; height: 100%; display: block; background: transparent; }
+    .divider-vertical {
+      width: 1px; align-self: stretch;
+      background-image: linear-gradient(to bottom, var(--frame-line) 0 8px, transparent 8px 18px);
+      background-repeat: repeat-y; background-size: 1px 18px; opacity: .95;
+    }
+    .reference-column { display: flex; flex-direction: column; gap: 28px; align-items: stretch; justify-content: center; }
+    .ref-card { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+    .ref-frame {
+      width: 100%; aspect-ratio: 1/1;
+      border: 1px solid var(--frame-line); background: var(--bg);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .ref-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .ref-label { font-family: var(--serif); font-size: 1.02rem; color: #8d877f; text-align: center; }
+
+    .controls-below { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .btn-play {
+      background: var(--sage-green); color: white; border: none;
+      padding: 10px 22px; border-radius: 20px; cursor: pointer;
+      font-family: var(--sans); font-size: .93rem;
+    }
+    .era-range-wrap {
+      display: flex; align-items: center; justify-content: center;
+      gap: 20px; width: min(720px,88vw); margin: 0 auto;
+    }
+    .era-slider { flex: 1; accent-color: var(--clay); cursor: pointer; height: 6px; }
+    .era-text { font-family: var(--serif); font-size: 1.32rem; color: var(--clay); min-width: 170px; text-align: center; }
+    .hidden { display: none !important; }
+
+    /* ══════════════════════════════════════════════════════════════
+       GARDEN
+    ══════════════════════════════════════════════════════════════ */
+    .garden-section { padding: 0; background: var(--bg); position: relative; }
+
+    .full-lawn {
+      position: relative; width: 100%;
+      background: linear-gradient(180deg, var(--lawn) 0%, var(--lawn-mid) 60%, var(--lawn-dark) 100%);
+      padding: 80px clamp(16px,4vw,60px) 214px;
+      overflow: visible; contain: layout style;
+    }
+    .fence-divider    { z-index: 10; }
+    .featured-header  { position: relative; z-index: 2; }
+    .era-grid         { position: relative; z-index: 2; }
+    .fence-divider {
+      position: absolute; top: -20px; left: 0; right: 0; height: 40px;
+      background-image: linear-gradient(90deg, var(--fence-brown) 18px, transparent 18px);
+      background-size: 35px 100%; border-bottom: 4px solid var(--fence-light); z-index: 10;
+    }
+
+    .featured-header { text-align: center; margin-bottom: 56px; }
+    .featured-header .section-title { color: white; }
+    .featured-header .section-subtitle { color: rgba(255,255,255,.62); margin-bottom: 0; font-size: .85rem; }
+
+    .era-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: clamp(48px, 7vw, 88px);
+      column-gap: clamp(24px, 5vw, 80px);
+    }
+    .era-cell.span-full { grid-column: 1 / -1; }
+    .era-cell { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .era-cell-label {
+      font-family: var(--serif);
+      font-size: clamp(.68rem,.9vw,.8rem);
+      color: rgba(255,255,255,.42);
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 16px; align-self: flex-start; padding-left: 4px;
+    }
+    .flower-row {
+      display: flex; align-items: flex-end; justify-content: center;
+      flex-wrap: wrap; gap: clamp(8px,2vw,20px);
+    }
+    .feature-item {
+      width: clamp(160px, 22vw, 300px);
+      display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+    .lift-0  { margin-bottom: 0; }
+    .lift-20 { margin-bottom: clamp(10px,2vw,20px); }
+    .lift-40 { margin-bottom: clamp(20px,3.5vw,40px); }
+
+    @keyframes windSway {
+      0%   { transform: translateZ(0) rotate(0deg);     }
+      12%  { transform: translateZ(0) rotate(3.2deg);   }
+      30%  { transform: translateZ(0) rotate(-2.4deg);  }
+      48%  { transform: translateZ(0) rotate(1.6deg);   }
+      63%  { transform: translateZ(0) rotate(-0.9deg);  }
+      76%  { transform: translateZ(0) rotate(0.4deg);   }
+      88%  { transform: translateZ(0) rotate(-0.15deg); }
+      100% { transform: translateZ(0) rotate(0deg);     }
+    }
+    .feature-flower {
+      width: 100%; aspect-ratio: 300 / 330;
+      display: flex; align-items: flex-end; justify-content: center;
+      will-change: transform; transform: translateZ(0); transform-origin: center bottom;
+      position: relative; z-index: 2; cursor: default;
+    }
+    .feature-flower.sway {
+      animation: windSway 2.8s cubic-bezier(.22,.61,.36,1) forwards;
+    }
+    .feature-flower img {
+      display: block; width: 100%; height: 100%; object-fit: contain;
+      transform: translateZ(0); backface-visibility: hidden;
+      pointer-events: none; user-select: none; -webkit-user-drag: none;
+    }
+
+    .flower-label-wrap {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; margin-top: 8px; position: relative; z-index: 10;
+    }
+    .flower-pill {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column; align-items: center;
+      background: rgba(20,25,18,.46);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px; padding: 4px 10px 5px;
+      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+      transition: background .28s, border-color .28s;
+      text-align: center; cursor: default; overflow: hidden;
+    }
+    .feature-item:hover .flower-pill {
+      background: rgba(20,25,18,.65); border-color: rgba(255,255,255,.18);
+    }
+    .pill-title {
+      font-family: var(--serif); font-size: clamp(.64rem,.8vw,.78rem);
+      color: rgba(255,255,255,.82); line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+    }
+    .pill-year {
+      font-family: var(--sans); font-size: clamp(.58rem,.7vw,.64rem);
+      color: rgba(255,255,255,.40); letter-spacing: 1px; margin-top: 1px;
+    }
+
+    .play-btn {
+      flex: 0 0 auto;
+      width: clamp(26px,3vw,32px); height: clamp(26px,3vw,32px);
+      border-radius: 50%; border: 1px solid rgba(255,255,255,.18);
+      background: rgba(20,25,18,.50);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+      transition: background .22s, border-color .22s, transform .18s; outline: none;
+    }
+    .play-btn:hover { background: rgba(147,166,129,.55); border-color: rgba(255,255,255,.35); transform: scale(1.12); }
+    .play-btn.playing { background: rgba(147,166,129,.72); border-color: rgba(255,255,255,.45); }
+    .play-btn svg { width: 11px; height: 11px; fill: rgba(255,255,255,.88); display: block; }
+
+    .flower-detail {
+      position: absolute;
+      top: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      width: clamp(200px, 28vw, 260px);
+      background: rgba(14,18,12,.88);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 10px; padding: 10px 12px 12px;
+      pointer-events: none; opacity: 0;
+      transition: opacity .28s ease, transform .28s ease;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 50;
+    }
+    .feature-item:hover .flower-detail { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .detail-title {
+      font-family: var(--serif); font-size: .76rem; color: rgba(255,255,255,.90);
+      margin-bottom: 6px; padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255,255,255,.10); line-height: 1.35;
+    }
+    .detail-title span { display: block; font-family: var(--sans); font-size: .62rem; color: rgba(255,255,255,.36); letter-spacing: .6px; margin-top: 2px; }
+    .detail-row { font-size: .67rem; color: rgba(255,255,255,.56); line-height: 1.52; margin-bottom: 5px; }
+    .detail-row strong { color: rgba(255,255,255,.84); font-weight: 600; }
+    .detail-quote { font-style: italic; font-size: .66rem; color: rgba(255,255,255,.48); border-left: 2px solid rgba(255,255,255,.14); padding-left: 7px; margin: 6px 0 5px; line-height: 1.5; }
+    .detail-row span[style*="color:#ffffff"] { text-shadow: 0 0 6px rgba(255,255,255,.5); opacity: .7; }
+    .detail-note  { font-size: .63rem; color: rgba(255,255,255,.38); line-height: 1.45; }
+
+    .hu-bar-wrap { margin: 7px 0 6px; }
+    .hu-bar { display: flex; width: 100%; height: 7px; border-radius: 4px; overflow: hidden; gap: 1px; }
+    .hu-seg { height: 100%; border-radius: 2px; transition: opacity .2s; }
+    .hu-seg:hover { opacity: .72; }
+    .hu-seg-open   { background: #7191aa; }
+    .hu-seg-even   { background: #c4a06a; }
+    .hu-seg-closed { background: #6b8a78; }
+    .hu-seg-pursed { background: #9a8fa2; }
+    .hu-legend { display: flex; gap: 9px; margin-top: 5px; flex-wrap: wrap; }
+    .hu-legend-item { display: flex; align-items: center; gap: 3px; font-size: .57rem; color: rgba(255,255,255,.42); white-space: nowrap; }
+    .hu-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 860px) {
+      .era-layout { grid-template-columns: 1fr; }
+      .divider-vertical { display: none; }
+      .reference-column { max-width: 340px; width: 100%; margin: 0 auto; }
+      .main-view-wrap { justify-content: center; min-height: auto; padding-left: 0; }
+      .spline-viewer-shell { height: 380px; margin-left: 0; }
+      .era-range-wrap { flex-direction: column; gap: 12px; }
+      .era-text { min-width: auto; }
+    }
+    @media (max-width: 600px) {
+      .era-grid { grid-template-columns: 1fr; }
+      .era-cell.span-full { grid-column: 1; }
+      .feature-item { width: clamp(180px, 60vw, 280px); }
+    }
+    @media (max-width: 420px) {
+      .feature-item { width: clamp(130px,55vw,200px); }
+    }
+  </style>
+
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.74/build/spline-viewer.js"></script>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<section class="header-section">
+
+  <div class="botanical-corner left" aria-hidden="true">
+    <svg viewBox="0 0 300 500" xmlns="http://www.w3.org/2000/svg" fill="none" overflow="visible">
+
+      <!-- STEM 1: x=70, top y=140, gold 7-petal, medium-tall -->
+      <path d="M70 500 Q72 420 74 340 Q76 270 78 210 Q80 175 82 140" stroke="#7fa46c" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse cx="62" cy="332" rx="5" ry="20" fill="#93b87c" opacity=".70" transform="rotate(-38 62 332)"/>
+      <ellipse cx="80" cy="324" rx="5" ry="19" fill="#93b87c" opacity=".62" transform="rotate(30 80 324)"/>
+      <ellipse cx="65" cy="235" rx="4" ry="17" fill="#93b87c" opacity=".65" transform="rotate(-32 65 235)"/>
+      <ellipse cx="81" cy="227" rx="4" ry="16" fill="#93b87c" opacity=".58" transform="rotate(26 81 227)"/>
+      <g transform="translate(82,140)">
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".82" transform="rotate(0)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".82" transform="rotate(51)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#c89658" opacity=".74" transform="rotate(103)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#c89658" opacity=".74" transform="rotate(154)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".78" transform="rotate(206)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".78" transform="rotate(257)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#c89658" opacity=".72" transform="rotate(309)"/>
+        <circle r="8" fill="#eac96a"/>
+        <circle r="4" fill="#c8a03c"/>
+      </g>
+
+      <!-- STEM 2: x=148, top y=82, rose 6-petal, tallest -->
+      <path d="M148 500 Q146 412 144 326 Q142 256 143 190 Q144 142 146 82" stroke="#82a870" stroke-width="2.1" stroke-linecap="round"/>
+      <ellipse cx="136" cy="318" rx="4.5" ry="20" fill="#9abf82" opacity=".68" transform="rotate(-40 136 318)"/>
+      <ellipse cx="158" cy="310" rx="4.5" ry="19" fill="#9abf82" opacity=".60" transform="rotate(30 158 310)"/>
+      <ellipse cx="138" cy="222" rx="4" ry="17" fill="#9abf82" opacity=".64" transform="rotate(-34 138 222)"/>
+      <ellipse cx="156" cy="214" rx="4" ry="16" fill="#9abf82" opacity=".57" transform="rotate(26 156 214)"/>
+      <g transform="translate(146,82)">
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".82" transform="rotate(0)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".82" transform="rotate(60)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#b87a88" opacity=".72" transform="rotate(120)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#b87a88" opacity=".72" transform="rotate(180)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".78" transform="rotate(240)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".78" transform="rotate(300)"/>
+        <circle r="7" fill="#f2cac2"/>
+        <circle r="3.5" fill="#c89090"/>
+      </g>
+
+      <!-- STEM 3: x=210, top y=285, violet 5-petal, short -->
+      <path d="M210 500 Q211 455 213 406 Q215 365 218 332 Q220 308 222 285" stroke="#85ac72" stroke-width="1.9" stroke-linecap="round"/>
+      <ellipse cx="202" cy="410" rx="4" ry="17" fill="#9ec286" opacity=".65" transform="rotate(-36 202 410)"/>
+      <ellipse cx="222" cy="402" rx="4" ry="16" fill="#9ec286" opacity=".57" transform="rotate(27 222 402)"/>
+      <ellipse cx="204" cy="345" rx="3.5" ry="14" fill="#9ec286" opacity=".60" transform="rotate(-30 204 345)"/>
+      <ellipse cx="222" cy="338" rx="3.5" ry="13" fill="#9ec286" opacity=".53" transform="rotate(23 222 338)"/>
+      <g transform="translate(222,285)">
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#9490c8" opacity=".80" transform="rotate(0)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#9490c8" opacity=".80" transform="rotate(72)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#7a7eb8" opacity=".70" transform="rotate(144)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#7a7eb8" opacity=".70" transform="rotate(216)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#9490c8" opacity=".76" transform="rotate(288)"/>
+        <circle r="6.5" fill="#dcdaf0"/>
+        <circle r="3" fill="#a098cc"/>
+      </g>
+
+      <!-- STEM 4: x=256, top y=230, sage bud, medium -->
+      <path d="M256 500 Q257 458 259 412 Q261 372 264 338 Q266 308 268 230" stroke="#7ea86c" stroke-width="1.8" stroke-linecap="round"/>
+      <ellipse cx="248" cy="402" rx="3.5" ry="15" fill="#98c080" opacity=".60" transform="rotate(-34 248 402)"/>
+      <ellipse cx="266" cy="395" rx="3.5" ry="14" fill="#98c080" opacity=".53" transform="rotate(25 266 395)"/>
+      <ellipse cx="250" cy="317" rx="3" ry="13" fill="#98c080" opacity=".55" transform="rotate(-30 250 317)"/>
+      <ellipse cx="266" cy="310" rx="3" ry="12" fill="#98c080" opacity=".48" transform="rotate(22 266 310)"/>
+      <g transform="translate(268,230)">
+        <ellipse rx="5" ry="14" cy="-2" fill="#8ab67a" opacity=".84" transform="rotate(-8)"/>
+        <ellipse rx="5" ry="14" cy="-2" fill="#a8cc96" opacity=".72" transform="rotate(8)"/>
+        <path d="M-5 12 C-7 4 0,-4 0,-4 C0,-4 7,4 5,12 Z" fill="#5e8852" opacity=".55"/>
+      </g>
+
+      <!-- STEM 5: x=288, top y=310, blush bud, shortest -->
+      <path d="M288 500 Q289 468 290 432 Q291 402 293 372 Q294 348 295 310" stroke="#82aa72" stroke-width="1.6" stroke-linecap="round"/>
+      <ellipse cx="281" cy="442" rx="3" ry="13" fill="#9ec286" opacity=".56" transform="rotate(-28 281 442)"/>
+      <ellipse cx="295" cy="436" rx="3" ry="12" fill="#9ec286" opacity=".50" transform="rotate(22 295 436)"/>
+      <ellipse cx="282" cy="377" rx="3" ry="12" fill="#9ec286" opacity=".52" transform="rotate(-25 282 377)"/>
+      <g transform="translate(295,310)">
+        <ellipse rx="4.5" ry="13" cy="-2" fill="#dca8b2" opacity=".84" transform="rotate(-9)"/>
+        <ellipse rx="4.5" ry="13" cy="-2" fill="#f0c4ca" opacity=".72" transform="rotate(9)"/>
+        <path d="M-4 11 C-6 3 0,-5 0,-5 C0,-5 6,3 4,11 Z" fill="#638858" opacity=".50"/>
+      </g>
+
+    </svg>
+  </div>
+
+  <div class="botanical-corner right" aria-hidden="true">
+    <svg viewBox="0 0 300 500" xmlns="http://www.w3.org/2000/svg" fill="none" overflow="visible">
+      <!-- identical — CSS scaleX(-1) mirrors -->
+      <path d="M70 500 Q72 420 74 340 Q76 270 78 210 Q80 175 82 140" stroke="#7fa46c" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse cx="62" cy="332" rx="5" ry="20" fill="#93b87c" opacity=".70" transform="rotate(-38 62 332)"/>
+      <ellipse cx="80" cy="324" rx="5" ry="19" fill="#93b87c" opacity=".62" transform="rotate(30 80 324)"/>
+      <ellipse cx="65" cy="235" rx="4" ry="17" fill="#93b87c" opacity=".65" transform="rotate(-32 65 235)"/>
+      <ellipse cx="81" cy="227" rx="4" ry="16" fill="#93b87c" opacity=".58" transform="rotate(26 81 227)"/>
+      <g transform="translate(82,140)">
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".82" transform="rotate(0)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".82" transform="rotate(51)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#c89658" opacity=".74" transform="rotate(103)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#c89658" opacity=".74" transform="rotate(154)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".78" transform="rotate(206)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#d4a96c" opacity=".78" transform="rotate(257)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#c89658" opacity=".72" transform="rotate(309)"/>
+        <circle r="8" fill="#eac96a"/>
+        <circle r="4" fill="#c8a03c"/>
+      </g>
+      <path d="M148 500 Q146 412 144 326 Q142 256 143 190 Q144 142 146 82" stroke="#82a870" stroke-width="2.1" stroke-linecap="round"/>
+      <ellipse cx="136" cy="318" rx="4.5" ry="20" fill="#9abf82" opacity=".68" transform="rotate(-40 136 318)"/>
+      <ellipse cx="158" cy="310" rx="4.5" ry="19" fill="#9abf82" opacity=".60" transform="rotate(30 158 310)"/>
+      <ellipse cx="138" cy="222" rx="4" ry="17" fill="#9abf82" opacity=".64" transform="rotate(-34 138 222)"/>
+      <ellipse cx="156" cy="214" rx="4" ry="16" fill="#9abf82" opacity=".57" transform="rotate(26 156 214)"/>
+      <g transform="translate(146,82)">
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".82" transform="rotate(0)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".82" transform="rotate(60)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#b87a88" opacity=".72" transform="rotate(120)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#b87a88" opacity=".72" transform="rotate(180)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".78" transform="rotate(240)"/>
+        <ellipse rx="5" ry="13" cy="-16" fill="#cc8f98" opacity=".78" transform="rotate(300)"/>
+        <circle r="7" fill="#f2cac2"/>
+        <circle r="3.5" fill="#c89090"/>
+      </g>
+      <path d="M210 500 Q211 455 213 406 Q215 365 218 332 Q220 308 222 285" stroke="#85ac72" stroke-width="1.9" stroke-linecap="round"/>
+      <ellipse cx="202" cy="410" rx="4" ry="17" fill="#9ec286" opacity=".65" transform="rotate(-36 202 410)"/>
+      <ellipse cx="222" cy="402" rx="4" ry="16" fill="#9ec286" opacity=".57" transform="rotate(27 222 402)"/>
+      <ellipse cx="204" cy="345" rx="3.5" ry="14" fill="#9ec286" opacity=".60" transform="rotate(-30 204 345)"/>
+      <ellipse cx="222" cy="338" rx="3.5" ry="13" fill="#9ec286" opacity=".53" transform="rotate(23 222 338)"/>
+      <g transform="translate(222,285)">
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#9490c8" opacity=".80" transform="rotate(0)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#9490c8" opacity=".80" transform="rotate(72)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#7a7eb8" opacity=".70" transform="rotate(144)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#7a7eb8" opacity=".70" transform="rotate(216)"/>
+        <ellipse rx="4.5" ry="12" cy="-15" fill="#9490c8" opacity=".76" transform="rotate(288)"/>
+        <circle r="6.5" fill="#dcdaf0"/>
+        <circle r="3" fill="#a098cc"/>
+      </g>
+      <path d="M256 500 Q257 458 259 412 Q261 372 264 338 Q266 308 268 230" stroke="#7ea86c" stroke-width="1.8" stroke-linecap="round"/>
+      <ellipse cx="248" cy="402" rx="3.5" ry="15" fill="#98c080" opacity=".60" transform="rotate(-34 248 402)"/>
+      <ellipse cx="266" cy="395" rx="3.5" ry="14" fill="#98c080" opacity=".53" transform="rotate(25 266 395)"/>
+      <ellipse cx="250" cy="317" rx="3" ry="13" fill="#98c080" opacity=".55" transform="rotate(-30 250 317)"/>
+      <ellipse cx="266" cy="310" rx="3" ry="12" fill="#98c080" opacity=".48" transform="rotate(22 266 310)"/>
+      <g transform="translate(268,230)">
+        <ellipse rx="5" ry="14" cy="-2" fill="#8ab67a" opacity=".84" transform="rotate(-8)"/>
+        <ellipse rx="5" ry="14" cy="-2" fill="#a8cc96" opacity=".72" transform="rotate(8)"/>
+        <path d="M-5 12 C-7 4 0,-4 0,-4 C0,-4 7,4 5,12 Z" fill="#5e8852" opacity=".55"/>
+      </g>
+      <path d="M288 500 Q289 468 290 432 Q291 402 293 372 Q294 348 295 310" stroke="#82aa72" stroke-width="1.6" stroke-linecap="round"/>
+      <ellipse cx="281" cy="442" rx="3" ry="13" fill="#9ec286" opacity=".56" transform="rotate(-28 281 442)"/>
+      <ellipse cx="295" cy="436" rx="3" ry="12" fill="#9ec286" opacity=".50" transform="rotate(22 295 436)"/>
+      <ellipse cx="282" cy="377" rx="3" ry="12" fill="#9ec286" opacity=".52" transform="rotate(-25 282 377)"/>
+      <g transform="translate(295,310)">
+        <ellipse rx="4.5" ry="13" cy="-2" fill="#dca8b2" opacity=".84" transform="rotate(-9)"/>
+        <ellipse rx="4.5" ry="13" cy="-2" fill="#f0c4ca" opacity=".72" transform="rotate(9)"/>
+        <path d="M-4 11 C-6 3 0,-5 0,-5 C0,-5 6,3 4,11 Z" fill="#638858" opacity=".50"/>
+      </g>
+    </svg>
+  </div>
+
+  <h1>
+    Blooming <span class="accent">Vowels</span>: Visualizing <span class="accent">Four Hu</span><br/>
+    and Emotional Expression in <span class="accent">Mandopop Lyrics</span>
+  </h1>
+</section>
+
+<!-- ══════════ POT / TIMELINE ══════════ -->
+<section class="pot-section">
+  <div class="timeline-container">
+    <div class="title-ornament" aria-hidden="true">
+      <div class="title-ornament-line"></div>
+      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <ellipse cx="24" cy="11" rx="4.5" ry="9" fill="#c4a06a" opacity=".68" transform="rotate(0   24 24)"/>
+        <ellipse cx="24" cy="11" rx="4.5" ry="9" fill="#c4a06a" opacity=".68" transform="rotate(60  24 24)"/>
+        <ellipse cx="24" cy="11" rx="4.5" ry="9" fill="#c4a06a" opacity=".68" transform="rotate(120 24 24)"/>
+        <ellipse cx="24" cy="11" rx="4.5" ry="9" fill="#d4b87a" opacity=".52" transform="rotate(180 24 24)"/>
+        <ellipse cx="24" cy="11" rx="4.5" ry="9" fill="#d4b87a" opacity=".52" transform="rotate(240 24 24)"/>
+        <ellipse cx="24" cy="11" rx="4.5" ry="9" fill="#d4b87a" opacity=".52" transform="rotate(300 24 24)"/>
+        <circle cx="24" cy="24" r="5" fill="#e8c97a" opacity=".85"/>
+        <circle cx="24" cy="24" r="2.4" fill="#c8a240"/>
+      </svg>
+      <div class="title-ornament-line right"></div>
+    </div>
+    <h2 class="section-title" style="color:var(--clay);">Garden of Period Blooms</h2>
+    <p class="section-subtitle">Seven composite flowers representing five-year intervals of vowel structure, emotional word frequency,<br>and overall emotional tone.</p>
+  </div>
+  <div class="pot-layout-container">
+    <div class="era-layout">
+      <div class="main-view-wrap">
+        <div class="hidden spline-viewer-shell" id="spline1991Row"><spline-viewer url="https://prod.spline.design/FARUPjihcL4y3nkv/scene.splinecode"></spline-viewer></div>
+        <div class="hidden spline-viewer-shell" id="spline1996Row"><spline-viewer url="https://prod.spline.design/R6X0lJNQBCpvWjPg/scene.splinecode"></spline-viewer></div>
+        <div class="hidden spline-viewer-shell" id="spline2001Row"><spline-viewer url="https://prod.spline.design/oUP5vMVUtj66rhkh/scene.splinecode"></spline-viewer></div>
+        <div class="hidden spline-viewer-shell" id="spline2006Row"><spline-viewer url="https://prod.spline.design/OwIom7X38XaY3EbX/scene.splinecode"></spline-viewer></div>
+        <div class="hidden spline-viewer-shell" id="spline2011Row"><spline-viewer url="https://prod.spline.design/jyeqehMz0BpLhBuE/scene.splinecode"></spline-viewer></div>
+        <div class="hidden spline-viewer-shell" id="spline2016Row"><spline-viewer url="https://prod.spline.design/UWcw3XsyfqmSDPju/scene.splinecode"></spline-viewer></div>
+        <div class="hidden spline-viewer-shell" id="spline2021Row"><spline-viewer url="https://prod.spline.design/e9DJ7LzQHjAL-K81/scene.splinecode"></spline-viewer></div>
+      </div>
+      <div class="divider-vertical" aria-hidden="true"></div>
+      <div class="reference-column">
+        <div class="ref-card">
+          <div class="ref-frame"><img id="eraTopImg" src="1991-1995top.png" alt="Top view"></div>
+          <div class="ref-label">Top view</div>
+        </div>
+        <div class="ref-card">
+          <div class="ref-frame"><img id="eraSideImg" src="1991-1995side.png" alt="Side view"></div>
+          <div class="ref-label">Side view</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls-below">
+      <div class="era-text" id="eraText">1991 - 1995</div>
+      <div class="era-range-wrap">
+        <button class="btn-play" id="playBtn">Play ▶</button>
+        <input class="era-slider" id="eraSlider" type="range" min="0" max="6" step="1" value="0"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FEATURED FLOWERS ══════════ -->
+<section class="garden-section">
+  <div class="fence-divider"></div>
+  <div class="full-lawn">
+
+    <div class="featured-header">
+      <h2 class="section-title">Featured Flowers</h2>
+      <p class="section-subtitle">Distinctive yearly blooms selected as individual highlights within the timeline.</p>
+    </div>
+
+    <div class="era-grid">
+
+      <!-- ══ ROW 1: 1991–1995 ══ -->
+      <div class="era-cell span-full">
+        <div class="era-cell-label">1991 – 1995</div>
+        <div class="flower-row">
+
+          <div class="feature-item lift-40">
+            <div class="flower-detail">
+              <div class="detail-title">水手 · 鄭智化<span>1992 · Song Emotion: <span style="background:#ffb2da33; border-radius:3px; padding:1px 5px; color:#ffb2da; font-weight:600">+1</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 47.83% · Even 27.61% · Closed 19.35% · Pursed 5.22%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:47.83%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:27.61%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:19.35%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:5.22%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#79e9fd28; border-radius:3px; padding:0 3px; color:#79e9fd">−1.75</span> · Even <span style="background:#a7f1fe28; border-radius:3px; padding:0 3px; color:#a7f1fe">−1.14</span> · Closed <span style="background:#8cecfd28; border-radius:3px; padding:0 3px; color:#8cecfd">−1.50</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
+              <div class="detail-quote">「這點痛算什麽，擦乾淚不要怕」</div>
+              <div class="detail-note">Negative lexical values coexist with a positive overall direction.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="shuishou.png" alt="水手"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">水手 · 鄭智化</div><div class="pill-year">1992</div></div>
+              <button class="play-btn" data-src="shuishou.mp3" aria-label="Play 水手"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+
+          <div class="feature-item lift-0">
+            <div class="flower-detail">
+              <div class="detail-title">風中有朵雨做的雲 · 孟庭葦<span>1993 · Song Emotion: <span style="background:#b2f3fe33; border-radius:3px; padding:1px 5px; color:#b2f3fe; font-weight:600">−1</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 33.44% · Even 33.77% · Closed 20.66% · Pursed 12.13%<br><strong>Closed + Pursed: 32.77%</strong>
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:33.44%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:33.77%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:20.66%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:12.13%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span> · Even <span style="background:#ff65b528; border-radius:3px; padding:0 3px; color:#ff65b5">+2.00</span> · Closed <span style="background:#65e6fd28; border-radius:3px; padding:0 3px; color:#65e6fd">−2.00</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
+              <div class="detail-quote">「風中有朵雨做的雲，一朵雨做的雲」</div>
+              <div class="detail-note">Compressed phonetic structure; color mapping indicative.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="fengzhong.png" alt="風中有朵雨做的雲"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">風中有朵雨做的雲 · 孟庭葦</div><div class="pill-year">1993</div></div>
+              <button class="play-btn" data-src="fengzhong.mp3" aria-label="Play 風中有朵雨做的雲"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+
+          <div class="feature-item lift-20">
+            <div class="flower-detail">
+              <div class="detail-title">小芳 · 李春波<span>1993 · Song Emotion: <span style="background:#ff368533; border-radius:3px; padding:1px 5px; color:#ff3685; font-weight:600">+3</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 44.52% · Even 30.97% · Closed 24.52% · Pursed 0.00%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:44.52%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:30.97%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:24.52%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:0%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#ff65b528; border-radius:3px; padding:0 3px; color:#ff65b5">+2.00</span> · Even <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span> · Closed <span style="background:#ffb2da28; border-radius:3px; padding:0 3px; color:#ffb2da">+1.00</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
+              <div class="detail-quote">「村裡有個姑娘叫小芳，長得好看又善良」</div>
+              <div class="detail-note">Positive sentiment aligns with open-vowel dominance; no pursed vowels.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="xiaofang.png" alt="小芳"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">小芳 · 李春波</div><div class="pill-year">1993</div></div>
+              <button class="play-btn" data-src="xiaofang.mp3" aria-label="Play 小芳"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ ROW 2 LEFT: 1996–2000 ══ -->
+      <div class="era-cell">
+        <div class="era-cell-label">1996 – 2000</div>
+        <div class="flower-row">
+          <div class="feature-item lift-20">
+            <div class="flower-detail">
+              <div class="detail-title">獨角戲 · 許茹芸<span>1996 · Song Emotion: <span style="background:#19a3f933; border-radius:3px; padding:1px 5px; color:#19a3f9; font-weight:600">−4</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 28.29% · Even 46.86% · Closed 20.29% · Pursed 4.57%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:28.29%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:46.86%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:20.29%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:4.57%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#79e9fd28; border-radius:3px; padding:0 3px; color:#79e9fd">−1.75</span> · Even <span style="background:#d9f9fe28; border-radius:3px; padding:0 3px; color:#d9f9fe">−0.50</span> · Closed <span style="background:#65e6fd28; border-radius:3px; padding:0 3px; color:#65e6fd">−2.00</span> · Pursed <span style="background:#19a3f928; border-radius:3px; padding:0 3px; color:#19a3f9">−4.00</span></div>
+              <div class="detail-quote">「自始至終全是你」</div>
+              <div class="detail-note">Even vowels dominate; emotional values negative across all groups.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="dujiaoxi.png" alt="獨角戲"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">獨角戲 · 許茹芸</div><div class="pill-year">1996</div></div>
+              <button class="play-btn" data-src="dujiaoxi.mp3" aria-label="Play 獨角戲"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ROW 2 RIGHT: 2001–2005 ══ -->
+      <div class="era-cell">
+        <div class="era-cell-label">2001 – 2005</div>
+        <div class="flower-row">
+          <div class="feature-item lift-0">
+            <div class="flower-detail">
+              <div class="detail-title">LYDIA · F.I.R<span>2004 · Song Emotion: <span style="background:#ffb2da33; border-radius:3px; padding:1px 5px; color:#ffb2da; font-weight:600">+1</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 46.39% · Even 32.99% · Closed 15.98% · Pursed 4.64%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:46.39%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:32.99%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:15.98%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:4.64%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#86ecfd28; border-radius:3px; padding:0 3px; color:#86ecfd">−1.57</span> · Even <span style="background:#f0fdff28; border-radius:3px; padding:0 3px; color:#f0fdff">−0.20</span> · Closed <span style="background:#d9f9fe28; border-radius:3px; padding:0 3px; color:#d9f9fe">−0.50</span> · Pursed <span style="background:#ff65b528; border-radius:3px; padding:0 3px; color:#ff65b5">+2.00</span></div>
+              <div class="detail-quote">「生命總不會只充滿悲傷」</div>
+              <div class="detail-note">Open-dominant; song's later turn shifts direction to positive.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="lydia.png" alt="LYDIA"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">LYDIA · F.I.R</div><div class="pill-year">2004</div></div>
+              <button class="play-btn" data-src="lydia.mp3" aria-label="Play LYDIA"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ROW 3 LEFT: 2006–2010 ══ -->
+      <div class="era-cell">
+        <div class="era-cell-label">2006 – 2010</div>
+        <div class="flower-row">
+          <div class="feature-item lift-40">
+            <div class="flower-detail">
+              <div class="detail-title">日不落 · 蔡依林<span>2007 · Song Emotion: <span style="background:#ff234b33; border-radius:3px; padding:1px 5px; color:#ff234b; font-weight:600">+4</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 29.69% · Even 48.45% · Closed 20.00% · Pursed 1.86%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:29.69%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:48.45%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:20.00%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:1.86%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#ffb2da28; border-radius:3px; padding:0 3px; color:#ffb2da">+1.00</span> · Even <span style="background:#ffaad628; border-radius:3px; padding:0 3px; color:#ffaad6">+1.11</span> · Closed <span style="background:#ffd9ec28; border-radius:3px; padding:0 3px; color:#ffd9ec">+0.50</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
+              <div class="detail-quote">「緊牽著心 把世界走遍」</div>
+              <div class="detail-note">Front vowels edge out open; positive sentiment across all groups.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="ribuluo.png" alt="日不落"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">日不落 · 蔡依林</div><div class="pill-year">2007</div></div>
+              <button class="play-btn" data-src="ribuluo.mp3" aria-label="Play 日不落"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ROW 3 RIGHT: 2011–2015 ══ -->
+      <div class="era-cell">
+        <div class="era-cell-label">2011 – 2015</div>
+        <div class="flower-row">
+          <div class="feature-item lift-0">
+            <div class="flower-detail">
+              <div class="detail-title">追夢赤子心 · GALA<span>2011 · Song Emotion: <span style="background:#ff234b33; border-radius:3px; padding:1px 5px; color:#ff234b; font-weight:600">+4</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 41.44% · Even 32.87% · Closed 19.44% · Pursed 6.25%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:41.44%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:32.87%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:19.44%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:6.25%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#c9f6fe28; border-radius:3px; padding:0 3px; color:#c9f6fe">−0.70</span> · Even <span style="background:#8cecfd28; border-radius:3px; padding:0 3px; color:#8cecfd">−1.50</span> · Closed <span style="background:#23b4fa28; border-radius:3px; padding:0 3px; color:#23b4fa">−3.60</span> · Pursed <span style="background:#7feafd28; border-radius:3px; padding:0 3px; color:#7feafd">−1.67</span></div>
+              <div class="detail-quote">「失敗後鬱鬱寡歡，那是懦夫的表現」</div>
+              <div class="detail-note">Negative lexical values reinforce resilience; overall direction strongly positive.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="zhuimeng.png" alt="追夢赤子心"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">追夢赤子心 · GALA</div><div class="pill-year">2011</div></div>
+              <button class="play-btn" data-src="zhuimeng.mp3" aria-label="Play 追夢赤子心"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ROW 4 LEFT: 2016–2020 ══ -->
+      <div class="era-cell">
+        <div class="era-cell-label">2016 – 2020</div>
+        <div class="flower-row">
+          <div class="feature-item lift-20">
+            <div class="flower-detail">
+              <div class="detail-title">怪美的 · 蔡依林<span>2018 · Song Emotion: <span style="background:#ff65b533; border-radius:3px; padding:1px 5px; color:#ff65b5; font-weight:600">+2</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 42.12% · Even 21.58% · Closed 32.53% · Pursed 3.77%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:42.12%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:21.58%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:32.53%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:3.77%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#99effd28; border-radius:3px; padding:0 3px; color:#99effd">−1.33</span> · Even <span style="background:#b2f3fe28; border-radius:3px; padding:0 3px; color:#b2f3fe">−1.00</span> · Closed <span style="background:#3bd9fc28; border-radius:3px; padding:0 3px; color:#3bd9fc">−2.67</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
+              <div class="detail-quote">「錯的對的，說美的醜的，怪美的」</div>
+              <div class="detail-note">High closed-vowel proportion; oppositional wording with positive song-level direction.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="guaimeide.png" alt="怪美的"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">怪美的 · 蔡依林</div><div class="pill-year">2018</div></div>
+              <button class="play-btn" data-src="guaimeide.mp3" aria-label="Play 怪美的"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ROW 4 RIGHT: 2021–2025 ══ -->
+      <div class="era-cell">
+        <div class="era-cell-label">2021 – 2025</div>
+        <div class="flower-row">
+          <div class="feature-item lift-40">
+            <div class="flower-detail">
+              <div class="detail-title">可能 · 程響<span>2022 · Song Emotion: <span style="background:#ff65b533; border-radius:3px; padding:1px 5px; color:#ff65b5; font-weight:600">+2</span></span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 52.79% · Even 29.89% · Closed 13.69% · Pursed 3.63%
+                <div class="hu-bar-wrap"><div class="hu-bar">
+                  <div class="hu-seg hu-seg-open" style="width:52.79%"></div>
+                  <div class="hu-seg hu-seg-even" style="width:29.89%"></div>
+                  <div class="hu-seg hu-seg-closed" style="width:13.69%"></div>
+                  <div class="hu-seg hu-seg-pursed" style="width:3.63%"></div>
+                </div><div class="hu-legend">
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
+                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
+                </div></div>
+              </div>
+              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#ffd3ea28; border-radius:3px; padding:0 3px; color:#ffd3ea">+0.57</span> · Even <span style="background:#ff91ca28; border-radius:3px; padding:0 3px; color:#ff91ca">+1.43</span> · Closed <span style="background:#ffdeef28; border-radius:3px; padding:0 3px; color:#ffdeef">+0.43</span> · Pursed <span style="background:#ff368528; border-radius:3px; padding:0 3px; color:#ff3685">+3.00</span></div>
+              <div class="detail-quote">「可能擁有過夢想，才能叫做青春」</div>
+              <div class="detail-note">Open vowels exceed half the structure; positive sentiment across all groups.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="keneng.png" alt="可能"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">可能 · 程響</div><div class="pill-year">2022</div></div>
+              <button class="play-btn" data-src="keneng.mp3" aria-label="Play 可能"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /era-grid -->
+  </div><!-- /full-lawn -->
+</section>
+
+<script>
+const eras = ["1991 - 1995","1996 - 2000","2001 - 2005","2006 - 2010","2011 - 2015","2016 - 2020","2021 - 2025"];
+let eraIdx = 0, eraTimer = null;
+const eraTopImg  = document.getElementById('eraTopImg');
+const eraSideImg = document.getElementById('eraSideImg');
+const eraTextEl  = document.getElementById('eraText');
+const eraSlider  = document.getElementById('eraSlider');
+const playBtn    = document.getElementById('playBtn');
+const splineRows = {
+  "1991 - 1995": document.getElementById('spline1991Row'),
+  "1996 - 2000": document.getElementById('spline1996Row'),
+  "2001 - 2005": document.getElementById('spline2001Row'),
+  "2006 - 2010": document.getElementById('spline2006Row'),
+  "2011 - 2015": document.getElementById('spline2011Row'),
+  "2016 - 2020": document.getElementById('spline2016Row'),
+  "2021 - 2025": document.getElementById('spline2021Row')
+};
+function hideAllEraViews(){ Object.values(splineRows).forEach(r=>r.classList.add('hidden')); }
+function updateEraView(){
+  const text=eras[eraIdx]; eraTextEl.innerText=text; eraSlider.value=eraIdx;
+  const fb=text.replace(/\s/g,"");
+  eraTopImg.src=fb+"top.png"; eraSideImg.src=fb+"side.png";
+  hideAllEraViews(); splineRows[text].classList.remove('hidden');
+}
+eraSlider.addEventListener('input',()=>{ eraIdx=+eraSlider.value; updateEraView(); });
+playBtn.addEventListener('click',()=>{
+  if(eraTimer){ clearInterval(eraTimer); eraTimer=null; playBtn.innerText="Play ▶"; }
+  else{ playBtn.innerText="Pause ⏸"; eraTimer=setInterval(()=>{ eraIdx=(eraIdx+1)%eras.length; updateEraView(); },2000); }
+});
+updateEraView();
+
+document.querySelectorAll('.spline-viewer-shell').forEach(el=>{
+  el.addEventListener('wheel',e=>e.preventDefault(),{passive:false});
+});
+
+document.querySelectorAll('[data-flower]').forEach(flower=>{
+  flower.addEventListener('mouseenter',()=>{
+    flower.classList.remove('sway');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ flower.classList.add('sway'); }));
+  });
+  flower.addEventListener('mouseleave',()=>{ flower.classList.remove('sway'); });
+  flower.addEventListener('animationend',()=>{ flower.classList.remove('sway'); });
+});
+
+const PLAY_ICON  = `<svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg>`;
+const PAUSE_ICON = `<svg viewBox="0 0 12 14"><rect x="1" y="1" width="3.5" height="12" rx="1"/><rect x="7.5" y="1" width="3.5" height="12" rx="1"/></svg>`;
+let currentAudio = null, currentBtn = null;
+function resetBtn(btn){ if(!btn) return; btn.innerHTML=PLAY_ICON; btn.classList.remove('playing'); }
+document.querySelectorAll('.play-btn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    e.stopPropagation();
+    const src = btn.dataset.src;
+    if(currentBtn===btn && currentAudio && !currentAudio.paused){
+      currentAudio.pause(); resetBtn(btn); currentBtn=null; return;
+    }
+    if(currentAudio){ currentAudio.pause(); currentAudio.currentTime=0; }
+    resetBtn(currentBtn);
+    currentAudio = new Audio(src); currentBtn = btn;
+    btn.innerHTML = PAUSE_ICON; btn.classList.add('playing');
+    currentAudio.play().catch(()=>{ resetBtn(btn); currentBtn=null; });
+    currentAudio.addEventListener('ended',()=>{ resetBtn(btn); currentBtn=null; currentAudio=null; });
+  });
+});
+
+document.querySelectorAll('.feature-item').forEach(item=>{
+  item.addEventListener('mouseenter',()=>{
+    const tip = item.querySelector('.flower-detail');
+    if(!tip) return;
+    tip.style.left='50%';
+    requestAnimationFrame(()=>{
+      const r = tip.getBoundingClientRect();
+      const margin = 8;
+      if(r.left < margin){
+        tip.style.left = `calc(50% + ${margin - r.left}px)`;
+      } else if(r.right > window.innerWidth - margin){
+        tip.style.left = `calc(50% - ${r.right - (window.innerWidth - margin)}px)`;
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
