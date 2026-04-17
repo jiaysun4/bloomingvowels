@@ -125,10 +125,20 @@
     .main-view-wrap {
       display: flex; justify-content: flex-start; align-items: center;
       min-height: 560px; padding-left: 10px;
+      position: relative;
     }
     .spline-viewer-shell {
-      width: min(680px,100%); height: 560px;
-      overflow: hidden; background: transparent; margin-left: 170px;
+      position: absolute;
+      left: 170px;
+      width: min(680px, calc(100% - 170px)); height: 560px;
+      overflow: hidden; background: transparent;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    .spline-viewer-shell.active {
+      opacity: 1;
+      pointer-events: auto;
     }
     spline-viewer { width: 100%; height: 100%; display: block; background: transparent; }
     .divider-vertical {
@@ -158,7 +168,7 @@
     }
     .era-slider { flex: 1; accent-color: var(--clay); cursor: pointer; height: 6px; }
     .era-text { font-family: var(--serif); font-size: 1.32rem; color: var(--clay); min-width: 170px; text-align: center; }
-    .hidden { display: none !important; }
+    .hidden { display: none !important; } /* kept for other uses only */
 
     /* ══════════════════════════════════════════════════════════════
        GARDEN
@@ -168,7 +178,7 @@
     .full-lawn {
       position: relative; width: 100%;
       background: linear-gradient(180deg, var(--lawn) 0%, var(--lawn-mid) 60%, var(--lawn-dark) 100%);
-      padding: 80px clamp(16px,4vw,60px) 300px;
+      padding: 80px clamp(16px,4vw,60px) 327px;
       overflow: visible; contain: layout style;
     }
     .fence-divider    { z-index: 10; }
@@ -214,6 +224,15 @@
     .lift-20 { margin-bottom: clamp(10px,2vw,20px); }
     .lift-40 { margin-bottom: clamp(20px,3.5vw,40px); }
 
+    /* gentle continuous sway — true pendulum sine, no pause at center */
+    @keyframes musicSway {
+      0%   { transform: translateZ(0) rotate(1.8deg); }
+      50%  { transform: translateZ(0) rotate(-1.8deg); }
+      100% { transform: translateZ(0) rotate(1.8deg); }
+    }
+    .feature-flower.music-sway {
+      animation: musicSway 2.6s ease-in-out infinite;
+    }
     @keyframes windSway {
       0%   { transform: translateZ(0) rotate(0deg);     }
       12%  { transform: translateZ(0) rotate(3.2deg);   }
@@ -285,7 +304,7 @@
       position: absolute;
       top: calc(100% + 8px); left: 50%;
       transform: translateX(-50%) translateY(-6px);
-      width: clamp(200px, 28vw, 260px);
+      width: clamp(260px, 32vw, 320px);
       background: rgba(14,18,12,.88);
       border: 1px solid rgba(255,255,255,.09);
       border-radius: 10px; padding: 10px 12px 12px;
@@ -293,7 +312,8 @@
       transition: opacity .28s ease, transform .28s ease;
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 50;
     }
-    .feature-item:hover .flower-detail { opacity: 1; transform: translateX(-50%) translateY(0); }
+    /* click-open class replaces hover */
+    .flower-detail.open { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
     .detail-title {
       font-family: var(--serif); font-size: .76rem; color: rgba(255,255,255,.90);
       margin-bottom: 6px; padding-bottom: 5px;
@@ -306,17 +326,43 @@
     .detail-row span[style*="color:#ffffff"] { text-shadow: 0 0 6px rgba(255,255,255,.5); opacity: .7; }
     .detail-note  { font-size: .63rem; color: rgba(255,255,255,.38); line-height: 1.45; }
 
-    .hu-bar-wrap { margin: 7px 0 6px; }
-    .hu-bar { display: flex; width: 100%; height: 7px; border-radius: 4px; overflow: hidden; gap: 1px; }
-    .hu-seg { height: 100%; border-radius: 2px; transition: opacity .2s; }
-    .hu-seg:hover { opacity: .72; }
-    .hu-seg-open   { background: #7191aa; }
-    .hu-seg-even   { background: #c4a06a; }
-    .hu-seg-closed { background: #6b8a78; }
-    .hu-seg-pursed { background: #9a8fa2; }
-    .hu-legend { display: flex; gap: 9px; margin-top: 5px; flex-wrap: wrap; }
-    .hu-legend-item { display: flex; align-items: center; gap: 3px; font-size: .57rem; color: rgba(255,255,255,.42); white-space: nowrap; }
-    .hu-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    /* ── Stack bar ── */
+    .hu-bar-wrap { margin: 6px 0 8px; }
+    .hu-cols { display: flex; width: 88%; gap: 2px; }
+    .hu-col {
+      display: flex; flex-direction: column; align-items: center;
+      min-width: 0; overflow: visible;
+    }
+    .hu-col:last-child { align-items: flex-start; }
+    .hu-pct {
+      font-size: .85em; color: rgba(255,255,255,.42);
+      line-height: 1; margin-bottom: 2px; white-space: nowrap; text-align: center;
+    }
+    .hu-seg-bar { width: 100%; height: 7px; border-radius: 999px; }
+    .hu-name {
+      font-size: .75em; color: rgba(255,255,255,.42);
+      line-height: 1; margin-top: 3px; white-space: nowrap; text-align: center;
+    }
+
+    /* ── Sentiment legend — label uses detail-row strong, same as Four Hu distribution ── */
+    .sentiment-legend-wrap { margin: 6px 0 4px; }
+    .sentiment-gradient-bar {
+      width: 100%; height: 6px; border-radius: 3px;
+      background: linear-gradient(to right, #2b6bac 0%, #44b9ce 25%, #dedede 50%, #d0448d 75%, #bd2f2f 100%);
+    }
+    .sentiment-gradient-labels {
+      display: flex; justify-content: space-between;
+      font-size: .85em; color: rgba(255,255,255,.45);
+      margin-top: 2px;
+    }
+
+    /* Dimmed song emotion badge */
+    .detail-row span[style*='border-radius:3px'] { opacity: 0.72; }
+    /* song emotion value badge */
+    .song-emotion-badge {
+      display: inline-block;
+      border-radius: 3px; padding: 1px 5px; font-weight: 600;
+    }
 
     /* ══════════════════════════════════════
        RESPONSIVE
@@ -526,13 +572,13 @@
   <div class="pot-layout-container">
     <div class="era-layout">
       <div class="main-view-wrap">
-        <div class="hidden spline-viewer-shell" id="spline1991Row"><spline-viewer url="https://prod.spline.design/FARUPjihcL4y3nkv/scene.splinecode"></spline-viewer></div>
-        <div class="hidden spline-viewer-shell" id="spline1996Row"><spline-viewer url="https://prod.spline.design/R6X0lJNQBCpvWjPg/scene.splinecode"></spline-viewer></div>
-        <div class="hidden spline-viewer-shell" id="spline2001Row"><spline-viewer url="https://prod.spline.design/oUP5vMVUtj66rhkh/scene.splinecode"></spline-viewer></div>
-        <div class="hidden spline-viewer-shell" id="spline2006Row"><spline-viewer url="https://prod.spline.design/OwIom7X38XaY3EbX/scene.splinecode"></spline-viewer></div>
-        <div class="hidden spline-viewer-shell" id="spline2011Row"><spline-viewer url="https://prod.spline.design/jyeqehMz0BpLhBuE/scene.splinecode"></spline-viewer></div>
-        <div class="hidden spline-viewer-shell" id="spline2016Row"><spline-viewer url="https://prod.spline.design/UWcw3XsyfqmSDPju/scene.splinecode"></spline-viewer></div>
-        <div class="hidden spline-viewer-shell" id="spline2021Row"><spline-viewer url="https://prod.spline.design/e9DJ7LzQHjAL-K81/scene.splinecode"></spline-viewer></div>
+        <div class="spline-viewer-shell" id="spline1991Row"><spline-viewer url="https://prod.spline.design/FARUPjihcL4y3nkv/scene.splinecode"></spline-viewer></div>
+        <div class="spline-viewer-shell" id="spline1996Row"><spline-viewer url="https://prod.spline.design/R6X0lJNQBCpvWjPg/scene.splinecode"></spline-viewer></div>
+        <div class="spline-viewer-shell" id="spline2001Row"><spline-viewer url="https://prod.spline.design/oUP5vMVUtj66rhkh/scene.splinecode"></spline-viewer></div>
+        <div class="spline-viewer-shell" id="spline2006Row"><spline-viewer url="https://prod.spline.design/OwIom7X38XaY3EbX/scene.splinecode"></spline-viewer></div>
+        <div class="spline-viewer-shell" id="spline2011Row"><spline-viewer url="https://prod.spline.design/jyeqehMz0BpLhBuE/scene.splinecode"></spline-viewer></div>
+        <div class="spline-viewer-shell" id="spline2016Row"><spline-viewer url="https://prod.spline.design/UWcw3XsyfqmSDPju/scene.splinecode"></spline-viewer></div>
+        <div class="spline-viewer-shell" id="spline2021Row"><spline-viewer url="https://prod.spline.design/e9DJ7LzQHjAL-K81/scene.splinecode"></spline-viewer></div>
       </div>
       <div class="divider-vertical" aria-hidden="true"></div>
       <div class="reference-column">
@@ -575,21 +621,15 @@
 
           <div class="feature-item lift-40">
             <div class="flower-detail">
-              <div class="detail-title">水手 · 鄭智化<span>1992 · Song Emotion: <span style="background:#ffb2da33; border-radius:3px; padding:1px 5px; color:#ffb2da; font-weight:600">+1</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 47.83% · Even 27.61% · Closed 19.35% · Pursed 5.22%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:47.83%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:27.61%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:19.35%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:5.22%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">水手 · 鄭智化<span>1992</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:47.83"><div class="hu-pct">47.83%</div><div class="hu-seg-bar" style="background:#6dc8d8"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:27.61"><div class="hu-pct">27.61%</div><div class="hu-seg-bar" style="background:#8dd5e1"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.35"><div class="hu-pct">19.35%</div><div class="hu-seg-bar" style="background:#7acddc"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:5.22"><div class="hu-pct">5.22%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
+            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d8a0be33; border-radius:3px; padding:1px 5px; color:#d8a0be; font-weight:600">+1</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#79e9fd28; border-radius:3px; padding:0 3px; color:#79e9fd">−1.75</span> · Even <span style="background:#a7f1fe28; border-radius:3px; padding:0 3px; color:#a7f1fe">−1.14</span> · Closed <span style="background:#8cecfd28; border-radius:3px; padding:0 3px; color:#8cecfd">−1.50</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
               <div class="detail-quote">「這點痛算什麽，擦乾淚不要怕」</div>
               <div class="detail-note">Negative lexical values coexist with a positive overall direction.</div>
             </div>
@@ -602,21 +642,15 @@
 
           <div class="feature-item lift-0">
             <div class="flower-detail">
-              <div class="detail-title">風中有朵雨做的雲 · 孟庭葦<span>1993 · Song Emotion: <span style="background:#b2f3fe33; border-radius:3px; padding:1px 5px; color:#b2f3fe; font-weight:600">−1</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 33.44% · Even 33.77% · Closed 20.66% · Pursed 12.13%<br><strong>Closed + Pursed: 32.77%</strong>
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:33.44%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:33.77%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:20.66%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:12.13%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">風中有朵雨做的雲 · 孟庭葦<span>1993</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:33.44"><div class="hu-pct">33.44%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:33.77"><div class="hu-pct">33.77%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.66"><div class="hu-pct">20.66%</div><div class="hu-seg-bar" style="background:#5fc3d5"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:12.13"><div class="hu-pct">12.13%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
+            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#a0cfd833; border-radius:3px; padding:1px 5px; color:#a0cfd8; font-weight:600">−1</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span> · Even <span style="background:#ff65b528; border-radius:3px; padding:0 3px; color:#ff65b5">+2.00</span> · Closed <span style="background:#65e6fd28; border-radius:3px; padding:0 3px; color:#65e6fd">−2.00</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
               <div class="detail-quote">「風中有朵雨做的雲，一朵雨做的雲」</div>
               <div class="detail-note">Compressed phonetic structure; color mapping indicative.</div>
             </div>
@@ -629,21 +663,15 @@
 
           <div class="feature-item lift-20">
             <div class="flower-detail">
-              <div class="detail-title">小芳 · 李春波<span>1993 · Song Emotion: <span style="background:#ff368533; border-radius:3px; padding:1px 5px; color:#ff3685; font-weight:600">+3</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 44.52% · Even 30.97% · Closed 24.52% · Pursed 0.00%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:44.52%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:30.97%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:24.52%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:0%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">小芳 · 李春波<span>1993</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:44.52"><div class="hu-pct">44.52%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:30.97"><div class="hu-pct">30.97%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:24.52"><div class="hu-pct">24.52%</div><div class="hu-seg-bar" style="background:#e494be"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:0"><div class="hu-seg-bar" style="background:#dedede"></div></div></div></div>
+            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#cc407a33; border-radius:3px; padding:1px 5px; color:#cc407a; font-weight:600">+3</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#ff65b528; border-radius:3px; padding:0 3px; color:#ff65b5">+2.00</span> · Even <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span> · Closed <span style="background:#ffb2da28; border-radius:3px; padding:0 3px; color:#ffb2da">+1.00</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
               <div class="detail-quote">「村裡有個姑娘叫小芳，長得好看又善良」</div>
               <div class="detail-note">Positive sentiment aligns with open-vowel dominance; no pursed vowels.</div>
             </div>
@@ -663,21 +691,15 @@
         <div class="flower-row">
           <div class="feature-item lift-20">
             <div class="flower-detail">
-              <div class="detail-title">獨角戲 · 許茹芸<span>1996 · Song Emotion: <span style="background:#19a3f933; border-radius:3px; padding:1px 5px; color:#19a3f9; font-weight:600">−4</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 28.29% · Even 46.86% · Closed 20.29% · Pursed 4.57%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:28.29%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:46.86%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:20.29%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:4.57%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">獨角戲 · 許茹芸<span>1996</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:28.29"><div class="hu-pct">28.29%</div><div class="hu-seg-bar" style="background:#6dc8d8"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:46.86"><div class="hu-pct">46.86%</div><div class="hu-seg-bar" style="background:#b0e2e9"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.29"><div class="hu-pct">20.29%</div><div class="hu-seg-bar" style="background:#5fc3d5"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:4.57"><div class="hu-pct">4.57%</div><div class="hu-seg-bar" style="background:#3387bb"></div><div class="hu-name">Pursed</div></div></div></div>
+            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#358aba33; border-radius:3px; padding:1px 5px; color:#358aba; font-weight:600">−4</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#79e9fd28; border-radius:3px; padding:0 3px; color:#79e9fd">−1.75</span> · Even <span style="background:#d9f9fe28; border-radius:3px; padding:0 3px; color:#d9f9fe">−0.50</span> · Closed <span style="background:#65e6fd28; border-radius:3px; padding:0 3px; color:#65e6fd">−2.00</span> · Pursed <span style="background:#19a3f928; border-radius:3px; padding:0 3px; color:#19a3f9">−4.00</span></div>
               <div class="detail-quote">「自始至終全是你」</div>
               <div class="detail-note">Even vowels dominate; emotional values negative across all groups.</div>
             </div>
@@ -696,21 +718,16 @@
         <div class="flower-row">
           <div class="feature-item lift-0">
             <div class="flower-detail">
-              <div class="detail-title">LYDIA · F.I.R<span>2004 · Song Emotion: <span style="background:#ffb2da33; border-radius:3px; padding:1px 5px; color:#ffb2da; font-weight:600">+1</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 46.39% · Even 32.99% · Closed 15.98% · Pursed 4.64%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:46.39%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:32.99%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:15.98%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:4.64%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">LYDIA · F.I.R<span>2004</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:46.39"><div class="hu-pct">46.39%</div><div class="hu-seg-bar" style="background:#76ccdb"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:32.99"><div class="hu-pct">32.99%</div><div class="hu-seg-bar" style="background:#c0e9ef"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:15.98"><div class="hu-pct">15.98%</div><div class="hu-seg-bar" style="background:#b0e2e9"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:4.64"><div class="hu-pct">4.64%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Pursed</div></div></div></div>
+            
+<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d8a0be33; border-radius:3px; padding:1px 5px; color:#d8a0be; font-weight:600">+1</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#86ecfd28; border-radius:3px; padding:0 3px; color:#86ecfd">−1.57</span> · Even <span style="background:#f0fdff28; border-radius:3px; padding:0 3px; color:#f0fdff">−0.20</span> · Closed <span style="background:#d9f9fe28; border-radius:3px; padding:0 3px; color:#d9f9fe">−0.50</span> · Pursed <span style="background:#ff65b528; border-radius:3px; padding:0 3px; color:#ff65b5">+2.00</span></div>
               <div class="detail-quote">「生命總不會只充滿悲傷」</div>
               <div class="detail-note">Open-dominant; song's later turn shifts direction to positive.</div>
             </div>
@@ -729,21 +746,16 @@
         <div class="flower-row">
           <div class="feature-item lift-40">
             <div class="flower-detail">
-              <div class="detail-title">日不落 · 蔡依林<span>2007 · Song Emotion: <span style="background:#ff234b33; border-radius:3px; padding:1px 5px; color:#ff234b; font-weight:600">+4</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 29.69% · Even 48.45% · Closed 20.00% · Pursed 1.86%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:29.69%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:48.45%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:20.00%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:1.86%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">日不落 · 蔡依林<span>2007</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:29.69"><div class="hu-pct">29.69%</div><div class="hu-seg-bar" style="background:#e494be"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:48.45"><div class="hu-pct">48.45%</div><div class="hu-seg-bar" style="background:#e38fba"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.00"><div class="hu-pct">20.00%</div><div class="hu-seg-bar" style="background:#ebb0cd"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:1.86"><div class="hu-pct">1.86%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name"></div></div></div></div>
+            
+<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#c5375533; border-radius:3px; padding:1px 5px; color:#c53755; font-weight:600">+4</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#ffb2da28; border-radius:3px; padding:0 3px; color:#ffb2da">+1.00</span> · Even <span style="background:#ffaad628; border-radius:3px; padding:0 3px; color:#ffaad6">+1.11</span> · Closed <span style="background:#ffd9ec28; border-radius:3px; padding:0 3px; color:#ffd9ec">+0.50</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
               <div class="detail-quote">「緊牽著心 把世界走遍」</div>
               <div class="detail-note">Front vowels edge out open; positive sentiment across all groups.</div>
             </div>
@@ -762,21 +774,16 @@
         <div class="flower-row">
           <div class="feature-item lift-0">
             <div class="flower-detail">
-              <div class="detail-title">追夢赤子心 · GALA<span>2011 · Song Emotion: <span style="background:#ff234b33; border-radius:3px; padding:1px 5px; color:#ff234b; font-weight:600">+4</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 41.44% · Even 32.87% · Closed 19.44% · Pursed 6.25%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:41.44%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:32.87%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:19.44%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:6.25%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">追夢赤子心 · GALA<span>2011</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:41.44"><div class="hu-pct">41.44%</div><div class="hu-seg-bar" style="background:#a5dde7"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:32.87"><div class="hu-pct">32.87%</div><div class="hu-seg-bar" style="background:#7acddc"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.44"><div class="hu-pct">19.44%</div><div class="hu-seg-bar" style="background:#3595c3"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:6.25"><div class="hu-pct">6.25%</div><div class="hu-seg-bar" style="background:#71cad9"></div><div class="hu-name">Pursed</div></div></div></div>
+            
+<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#c5375533; border-radius:3px; padding:1px 5px; color:#c53755; font-weight:600">+4</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#c9f6fe28; border-radius:3px; padding:0 3px; color:#c9f6fe">−0.70</span> · Even <span style="background:#8cecfd28; border-radius:3px; padding:0 3px; color:#8cecfd">−1.50</span> · Closed <span style="background:#23b4fa28; border-radius:3px; padding:0 3px; color:#23b4fa">−3.60</span> · Pursed <span style="background:#7feafd28; border-radius:3px; padding:0 3px; color:#7feafd">−1.67</span></div>
               <div class="detail-quote">「失敗後鬱鬱寡歡，那是懦夫的表現」</div>
               <div class="detail-note">Negative lexical values reinforce resilience; overall direction strongly positive.</div>
             </div>
@@ -795,21 +802,16 @@
         <div class="flower-row">
           <div class="feature-item lift-20">
             <div class="flower-detail">
-              <div class="detail-title">怪美的 · 蔡依林<span>2018 · Song Emotion: <span style="background:#ff65b533; border-radius:3px; padding:1px 5px; color:#ff65b5; font-weight:600">+2</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 42.12% · Even 21.58% · Closed 32.53% · Pursed 3.77%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:42.12%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:21.58%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:32.53%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:3.77%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">怪美的 · 蔡依林<span>2018</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:42.12"><div class="hu-pct">42.12%</div><div class="hu-seg-bar" style="background:#83d1de"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:21.58"><div class="hu-pct">21.58%</div><div class="hu-seg-bar" style="background:#95d8e3"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:32.53"><div class="hu-pct">32.53%</div><div class="hu-seg-bar" style="background:#42b4cd"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:3.77"><div class="hu-pct">3.77%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
+            
+<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d3639d33; border-radius:3px; padding:1px 5px; color:#d3639d; font-weight:600">+2</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#99effd28; border-radius:3px; padding:0 3px; color:#99effd">−1.33</span> · Even <span style="background:#b2f3fe28; border-radius:3px; padding:0 3px; color:#b2f3fe">−1.00</span> · Closed <span style="background:#3bd9fc28; border-radius:3px; padding:0 3px; color:#3bd9fc">−2.67</span> · Pursed <span style="background:rgba(255,255,255,0.12); border-radius:3px; padding:0 3px; color:rgba(255,255,255,0.55)">0.00</span></div>
               <div class="detail-quote">「錯的對的，說美的醜的，怪美的」</div>
               <div class="detail-note">High closed-vowel proportion; oppositional wording with positive song-level direction.</div>
             </div>
@@ -828,21 +830,16 @@
         <div class="flower-row">
           <div class="feature-item lift-40">
             <div class="flower-detail">
-              <div class="detail-title">可能 · 程響<span>2022 · Song Emotion: <span style="background:#ff65b533; border-radius:3px; padding:1px 5px; color:#ff65b5; font-weight:600">+2</span></span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong><br>Open 52.79% · Even 29.89% · Closed 13.69% · Pursed 3.63%
-                <div class="hu-bar-wrap"><div class="hu-bar">
-                  <div class="hu-seg hu-seg-open" style="width:52.79%"></div>
-                  <div class="hu-seg hu-seg-even" style="width:29.89%"></div>
-                  <div class="hu-seg hu-seg-closed" style="width:13.69%"></div>
-                  <div class="hu-seg hu-seg-pursed" style="width:3.63%"></div>
-                </div><div class="hu-legend">
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#7191aa"></div>Open</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#c4a06a"></div>Even</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#6b8a78"></div>Closed</div>
-                  <div class="hu-legend-item"><div class="hu-legend-dot" style="background:#9a8fa2"></div>Pursed</div>
-                </div></div>
+              <div class="detail-title">可能 · 程響<span>2022</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:52.79"><div class="hu-pct">52.79%</div><div class="hu-seg-bar" style="background:#eaabcc"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:29.89"><div class="hu-pct">29.89%</div><div class="hu-seg-bar" style="background:#df7db0"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:13.69"><div class="hu-pct">13.69%</div><div class="hu-seg-bar" style="background:#ecb3d0"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:3.63"><div class="hu-pct">3.63%</div><div class="hu-seg-bar" style="background:#cf3e77"></div><div class="hu-name">Pursed</div></div></div></div>
+            
+<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
+              <div class="sentiment-gradient-bar"></div>
+              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
+            </div>
+            <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d3639d33; border-radius:3px; padding:1px 5px; color:#d3639d; font-weight:600">+2</span></div>
               </div>
-              <div class="detail-row"><strong>Avg. sentiment by vowel group</strong><br>Open <span style="background:#ffd3ea28; border-radius:3px; padding:0 3px; color:#ffd3ea">+0.57</span> · Even <span style="background:#ff91ca28; border-radius:3px; padding:0 3px; color:#ff91ca">+1.43</span> · Closed <span style="background:#ffdeef28; border-radius:3px; padding:0 3px; color:#ffdeef">+0.43</span> · Pursed <span style="background:#ff368528; border-radius:3px; padding:0 3px; color:#ff3685">+3.00</span></div>
               <div class="detail-quote">「可能擁有過夢想，才能叫做青春」</div>
               <div class="detail-note">Open vowels exceed half the structure; positive sentiment across all groups.</div>
             </div>
@@ -860,6 +857,7 @@
 </section>
 
 <script>
+/* ══ ERA SLIDER ══ */
 const eras = ["1991 - 1995","1996 - 2000","2001 - 2005","2006 - 2010","2011 - 2015","2016 - 2020","2021 - 2025"];
 let eraIdx = 0, eraTimer = null;
 const eraTopImg  = document.getElementById('eraTopImg');
@@ -867,6 +865,7 @@ const eraSideImg = document.getElementById('eraSideImg');
 const eraTextEl  = document.getElementById('eraText');
 const eraSlider  = document.getElementById('eraSlider');
 const playBtn    = document.getElementById('playBtn');
+
 const splineRows = {
   "1991 - 1995": document.getElementById('spline1991Row'),
   "1996 - 2000": document.getElementById('spline1996Row'),
@@ -876,17 +875,26 @@ const splineRows = {
   "2016 - 2020": document.getElementById('spline2016Row'),
   "2021 - 2025": document.getElementById('spline2021Row')
 };
-function hideAllEraViews(){ Object.values(splineRows).forEach(r=>r.classList.add('hidden')); }
+
+let activeEraText = null;
+
 function updateEraView(){
-  const text=eras[eraIdx]; eraTextEl.innerText=text; eraSlider.value=eraIdx;
-  const fb=text.replace(/\s/g,"");
-  eraTopImg.src=fb+"top.png"; eraSideImg.src=fb+"side.png";
-  hideAllEraViews(); splineRows[text].classList.remove('hidden');
+  const text = eras[eraIdx];
+  eraTextEl.innerText = text;
+  eraSlider.value = eraIdx;
+  const fb = text.replace(/\s/g,"");
+  eraTopImg.src  = fb + "top.png";
+  eraSideImg.src = fb + "side.png";
+  if(text === activeEraText) return;
+  if(activeEraText) splineRows[activeEraText].classList.remove('active');
+  activeEraText = text;
+  splineRows[text].classList.add('active');
 }
+
 eraSlider.addEventListener('input',()=>{ eraIdx=+eraSlider.value; updateEraView(); });
 playBtn.addEventListener('click',()=>{
-  if(eraTimer){ clearInterval(eraTimer); eraTimer=null; playBtn.innerText="Play ▶"; }
-  else{ playBtn.innerText="Pause ⏸"; eraTimer=setInterval(()=>{ eraIdx=(eraIdx+1)%eras.length; updateEraView(); },2000); }
+  if(eraTimer){ clearInterval(eraTimer); eraTimer=null; playBtn.innerText="Play \u25b6"; }
+  else{ playBtn.innerText="Pause \u23f8"; eraTimer=setInterval(()=>{ eraIdx=(eraIdx+1)%eras.length; updateEraView(); },1000); }
 });
 updateEraView();
 
@@ -894,50 +902,125 @@ document.querySelectorAll('.spline-viewer-shell').forEach(el=>{
   el.addEventListener('wheel',e=>e.preventDefault(),{passive:false});
 });
 
-document.querySelectorAll('[data-flower]').forEach(flower=>{
-  flower.addEventListener('mouseenter',()=>{
-    flower.classList.remove('sway');
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{ flower.classList.add('sway'); }));
+/* ══ INTERSECTION OBSERVER ══ */
+const potSection = document.querySelector('.pot-section');
+let splineAlive = true;
+const splineUrlMap = {
+  "spline1991Row":"https://prod.spline.design/FARUPjihcL4y3nkv/scene.splinecode",
+  "spline1996Row":"https://prod.spline.design/R6X0lJNQBCpvWjPg/scene.splinecode",
+  "spline2001Row":"https://prod.spline.design/oUP5vMVUtj66rhkh/scene.splinecode",
+  "spline2006Row":"https://prod.spline.design/OwIom7X38XaY3EbX/scene.splinecode",
+  "spline2011Row":"https://prod.spline.design/jyeqehMz0BpLhBuE/scene.splinecode",
+  "spline2016Row":"https://prod.spline.design/UWcw3XsyfqmSDPju/scene.splinecode",
+  "spline2021Row":"https://prod.spline.design/e9DJ7LzQHjAL-K81/scene.splinecode"
+};
+function destroyAllSplines(){
+  if(!splineAlive) return;
+  Object.values(splineRows).forEach(shell=>{
+    const sv = shell.querySelector('spline-viewer');
+    if(sv) shell.removeChild(sv);
   });
-  flower.addEventListener('mouseleave',()=>{ flower.classList.remove('sway'); });
-  flower.addEventListener('animationend',()=>{ flower.classList.remove('sway'); });
-});
+  splineAlive = false;
+}
+function restoreAllSplines(){
+  if(splineAlive) return;
+  Object.values(splineRows).forEach(shell=>{
+    const sv = document.createElement('spline-viewer');
+    sv.setAttribute('url', splineUrlMap[shell.id]);
+    shell.appendChild(sv);
+  });
+  splineAlive = true;
+}
+new IntersectionObserver(entries=>{
+  entries.forEach(e=> e.isIntersecting ? restoreAllSplines() : destroyAllSplines());
+},{threshold:0.05}).observe(potSection);
 
+/* ══ WIND SWAY: handled via click on flower (see tooltip section below) ══ */
+
+/* ══ MUSIC PLAYER + music-sway ══ */
 const PLAY_ICON  = `<svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg>`;
 const PAUSE_ICON = `<svg viewBox="0 0 12 14"><rect x="1" y="1" width="3.5" height="12" rx="1"/><rect x="7.5" y="1" width="3.5" height="12" rx="1"/></svg>`;
-let currentAudio = null, currentBtn = null;
+let currentAudio = null, currentBtn = null, currentFlower = null;
+
 function resetBtn(btn){ if(!btn) return; btn.innerHTML=PLAY_ICON; btn.classList.remove('playing'); }
+function stopSway(f){ if(f) f.classList.remove('music-sway'); }
+function startSway(f){ if(!f) return; f.classList.remove('sway'); f.classList.add('music-sway'); }
+
 document.querySelectorAll('.play-btn').forEach(btn=>{
   btn.addEventListener('click', e=>{
     e.stopPropagation();
     const src = btn.dataset.src;
+    const flower = btn.closest('.feature-item').querySelector('[data-flower]');
     if(currentBtn===btn && currentAudio && !currentAudio.paused){
-      currentAudio.pause(); resetBtn(btn); currentBtn=null; return;
+      currentAudio.pause(); resetBtn(btn); stopSway(flower);
+      currentBtn=null; currentFlower=null; return;
     }
     if(currentAudio){ currentAudio.pause(); currentAudio.currentTime=0; }
-    resetBtn(currentBtn);
-    currentAudio = new Audio(src); currentBtn = btn;
-    btn.innerHTML = PAUSE_ICON; btn.classList.add('playing');
-    currentAudio.play().catch(()=>{ resetBtn(btn); currentBtn=null; });
-    currentAudio.addEventListener('ended',()=>{ resetBtn(btn); currentBtn=null; currentAudio=null; });
+    resetBtn(currentBtn); stopSway(currentFlower);
+    currentAudio=new Audio(src); currentBtn=btn; currentFlower=flower;
+    btn.innerHTML=PAUSE_ICON; btn.classList.add('playing');
+    startSway(flower);
+    currentAudio.play().catch(()=>{ resetBtn(btn); stopSway(flower); currentBtn=null; currentFlower=null; });
+    currentAudio.addEventListener('ended',()=>{
+      resetBtn(btn); stopSway(flower);
+      currentBtn=null; currentFlower=null; currentAudio=null;
+    });
   });
 });
 
-document.querySelectorAll('.feature-item').forEach(item=>{
-  item.addEventListener('mouseenter',()=>{
-    const tip = item.querySelector('.flower-detail');
-    if(!tip) return;
-    tip.style.left='50%';
-    requestAnimationFrame(()=>{
-      const r = tip.getBoundingClientRect();
-      const margin = 8;
-      if(r.left < margin){
-        tip.style.left = `calc(50% + ${margin - r.left}px)`;
-      } else if(r.right > window.innerWidth - margin){
-        tip.style.left = `calc(50% - ${r.right - (window.innerWidth - margin)}px)`;
-      }
-    });
+/* ══ TOOLTIP: pill click opens, pill click again closes. flower click = sway only ══ */
+function openTooltip(tip){
+  document.querySelectorAll('.flower-detail.open').forEach(d=>d.classList.remove('open'));
+  tip.classList.add('open');
+  requestAnimationFrame(()=>{
+    const r = tip.getBoundingClientRect();
+    const margin = 8;
+    if(r.left < margin) tip.style.left=`calc(50% + ${margin-r.left}px)`;
+    else if(r.right > window.innerWidth-margin) tip.style.left=`calc(50% - ${r.right-(window.innerWidth-margin)}px)`;
   });
+}
+
+document.querySelectorAll('.feature-item').forEach(item=>{
+  const tip = item.querySelector('.flower-detail');
+  if(!tip) return;
+  const pill = item.querySelector('.flower-pill');
+  const flowerEl = item.querySelector('[data-flower]');
+
+  // Pill click: toggle tooltip
+  if(pill){
+    pill.style.cursor = 'pointer';
+    pill.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(tip.classList.contains('open')){ tip.classList.remove('open'); }
+      else { openTooltip(tip); }
+    });
+  }
+
+  // Flower click: sway only, no tooltip
+  if(flowerEl){
+    flowerEl.style.cursor = 'pointer';
+    flowerEl.addEventListener('click', e=>{
+      e.stopPropagation();
+      if(flowerEl.classList.contains('music-sway')) return;
+      flowerEl.classList.remove('sway');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ flowerEl.classList.add('sway'); }));
+    });
+  }
+});
+
+// Play button also opens tooltip
+document.querySelectorAll('.play-btn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    const item = btn.closest('.feature-item');
+    const tip = item?.querySelector('.flower-detail');
+    if(tip && !tip.classList.contains('open')) openTooltip(tip);
+  });
+});
+
+// Close when clicking outside
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.feature-item'))
+    document.querySelectorAll('.flower-detail.open').forEach(d=>d.classList.remove('open'));
 });
 </script>
 </body>
