@@ -328,7 +328,7 @@
 
     /* ── Stack bar ── */
     .hu-bar-wrap { margin: 6px 0 8px; }
-    .hu-cols { display: flex; width: 88%; gap: 2px; }
+    .hu-cols { display: flex; width: 95%; gap: 2px; }
     .hu-col {
       display: flex; flex-direction: column; align-items: center;
       min-width: 0; overflow: visible;
@@ -345,7 +345,25 @@
     }
 
     /* ── Sentiment legend — label uses detail-row strong, same as Four Hu distribution ── */
-    .sentiment-legend-wrap { margin: 6px 0 4px; }
+    .sentiment-legend-wrap {
+      margin: 6px 0 8px;
+      width: 95%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sentiment-legend-label {
+      margin-top: -15px;
+      flex: 0 0 auto;
+      font-size: .67rem;
+      color: rgba(255,255,255,.56);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .sentiment-gradient-group {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
     .sentiment-gradient-bar {
       width: 100%; height: 6px; border-radius: 3px;
       background: linear-gradient(to right, #2b6bac 0%, #44b9ce 25%, #dedede 50%, #d0448d 75%, #bd2f2f 100%);
@@ -624,10 +642,7 @@
               <div class="detail-title">水手 · 鄭智化<span>1992</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:47.83"><div class="hu-pct">47.83%</div><div class="hu-seg-bar" style="background:#6dc8d8"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:27.61"><div class="hu-pct">27.61%</div><div class="hu-seg-bar" style="background:#8dd5e1"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.35"><div class="hu-pct">19.35%</div><div class="hu-seg-bar" style="background:#7acddc"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:5.22"><div class="hu-pct">5.22%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
-            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+            <div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d8a0be33; border-radius:3px; padding:1px 5px; color:#d8a0be; font-weight:600">+1</span></div>
               </div>
               <div class="detail-quote">「這點痛算什麽，擦乾淚不要怕」</div>
@@ -645,10 +660,7 @@
               <div class="detail-title">風中有朵雨做的雲 · 孟庭葦<span>1993</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:33.44"><div class="hu-pct">33.44%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:33.77"><div class="hu-pct">33.77%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.66"><div class="hu-pct">20.66%</div><div class="hu-seg-bar" style="background:#5fc3d5"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:12.13"><div class="hu-pct">12.13%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
-            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+            <div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#a0cfd833; border-radius:3px; padding:1px 5px; color:#a0cfd8; font-weight:600">−1</span></div>
               </div>
               <div class="detail-quote">「風中有朵雨做的雲，一朵雨做的雲」</div>
@@ -666,10 +678,7 @@
               <div class="detail-title">小芳 · 李春波<span>1993</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:44.52"><div class="hu-pct">44.52%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:30.97"><div class="hu-pct">30.97%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:24.52"><div class="hu-pct">24.52%</div><div class="hu-seg-bar" style="background:#e494be"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:0"><div class="hu-seg-bar" style="background:#dedede"></div></div></div></div>
-            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+            <div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#cc407a33; border-radius:3px; padding:1px 5px; color:#cc407a; font-weight:600">+3</span></div>
               </div>
               <div class="detail-quote">「村裡有個姑娘叫小芳，長得好看又善良」</div>
@@ -694,10 +703,7 @@
               <div class="detail-title">獨角戲 · 許茹芸<span>1996</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:28.29"><div class="hu-pct">28.29%</div><div class="hu-seg-bar" style="background:#6dc8d8"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:46.86"><div class="hu-pct">46.86%</div><div class="hu-seg-bar" style="background:#b0e2e9"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.29"><div class="hu-pct">20.29%</div><div class="hu-seg-bar" style="background:#5fc3d5"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:4.57"><div class="hu-pct">4.57%</div><div class="hu-seg-bar" style="background:#3387bb"></div><div class="hu-name">Pursed</div></div></div></div>
-            <div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+            <div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#358aba33; border-radius:3px; padding:1px 5px; color:#358aba; font-weight:600">−4</span></div>
               </div>
               <div class="detail-quote">「自始至終全是你」</div>
@@ -722,10 +728,7 @@
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:46.39"><div class="hu-pct">46.39%</div><div class="hu-seg-bar" style="background:#76ccdb"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:32.99"><div class="hu-pct">32.99%</div><div class="hu-seg-bar" style="background:#c0e9ef"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:15.98"><div class="hu-pct">15.98%</div><div class="hu-seg-bar" style="background:#b0e2e9"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:4.64"><div class="hu-pct">4.64%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Pursed</div></div></div></div>
             
-<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+<div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d8a0be33; border-radius:3px; padding:1px 5px; color:#d8a0be; font-weight:600">+1</span></div>
               </div>
               <div class="detail-quote">「生命總不會只充滿悲傷」</div>
@@ -750,10 +753,7 @@
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:29.69"><div class="hu-pct">29.69%</div><div class="hu-seg-bar" style="background:#e494be"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:48.45"><div class="hu-pct">48.45%</div><div class="hu-seg-bar" style="background:#e38fba"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.00"><div class="hu-pct">20.00%</div><div class="hu-seg-bar" style="background:#ebb0cd"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:1.86"><div class="hu-pct">1.86%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name"></div></div></div></div>
             
-<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+<div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#c5375533; border-radius:3px; padding:1px 5px; color:#c53755; font-weight:600">+4</span></div>
               </div>
               <div class="detail-quote">「緊牽著心 把世界走遍」</div>
@@ -778,10 +778,7 @@
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:41.44"><div class="hu-pct">41.44%</div><div class="hu-seg-bar" style="background:#a5dde7"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:32.87"><div class="hu-pct">32.87%</div><div class="hu-seg-bar" style="background:#7acddc"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.44"><div class="hu-pct">19.44%</div><div class="hu-seg-bar" style="background:#3595c3"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:6.25"><div class="hu-pct">6.25%</div><div class="hu-seg-bar" style="background:#71cad9"></div><div class="hu-name">Pursed</div></div></div></div>
             
-<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+<div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#c5375533; border-radius:3px; padding:1px 5px; color:#c53755; font-weight:600">+4</span></div>
               </div>
               <div class="detail-quote">「失敗後鬱鬱寡歡，那是懦夫的表現」</div>
@@ -806,10 +803,7 @@
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:42.12"><div class="hu-pct">42.12%</div><div class="hu-seg-bar" style="background:#83d1de"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:21.58"><div class="hu-pct">21.58%</div><div class="hu-seg-bar" style="background:#95d8e3"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:32.53"><div class="hu-pct">32.53%</div><div class="hu-seg-bar" style="background:#42b4cd"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:3.77"><div class="hu-pct">3.77%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
             
-<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+<div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d3639d33; border-radius:3px; padding:1px 5px; color:#d3639d; font-weight:600">+2</span></div>
               </div>
               <div class="detail-quote">「錯的對的，說美的醜的，怪美的」</div>
@@ -834,10 +828,7 @@
               <div class="detail-row"><strong>Four Hu distribution</strong>
                 <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:52.79"><div class="hu-pct">52.79%</div><div class="hu-seg-bar" style="background:#eaabcc"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:29.89"><div class="hu-pct">29.89%</div><div class="hu-seg-bar" style="background:#df7db0"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:13.69"><div class="hu-pct">13.69%</div><div class="hu-seg-bar" style="background:#ecb3d0"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:3.63"><div class="hu-pct">3.63%</div><div class="hu-seg-bar" style="background:#cf3e77"></div><div class="hu-name">Pursed</div></div></div></div>
             
-<div class="sentiment-legend-wrap"><div class="detail-row"><strong>Sentiment legend</strong></div>
-              <div class="sentiment-gradient-bar"></div>
-              <div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div>
-            </div>
+<div class="sentiment-legend-wrap"><div class="sentiment-legend-label">Sentiment score</div><div class="sentiment-gradient-group"><div class="sentiment-gradient-bar"></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div>
             <div class="detail-row"><strong>Song Emotion</strong> <span style="background:#d3639d33; border-radius:3px; padding:1px 5px; color:#d3639d; font-weight:600">+2</span></div>
               </div>
               <div class="detail-quote">「可能擁有過夢想，才能叫做青春」</div>
@@ -1023,7 +1014,5 @@ document.addEventListener('click', e=>{
     document.querySelectorAll('.flower-detail.open').forEach(d=>d.classList.remove('open'));
 });
 </script>
-</body>
-</html>
 </body>
 </html>
