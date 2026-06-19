@@ -195,14 +195,53 @@
     .featured-header .section-subtitle { color: rgba(255,255,255,.62); margin-bottom: 0; font-size: .85rem; }
 
     .era-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      row-gap: clamp(48px, 7vw, 88px);
-      column-gap: clamp(24px, 5vw, 80px);
-    }
+  max-width: 1250px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(1fr, 1fr);
+  row-gap: clamp(48px, 7vw, 88px);
+  column-gap: clamp(20px, 3vw, 60px);
+}
     .era-cell.span-full { grid-column: 1 / -1; }
+
+.col-half-left{
+    grid-column:1 / 4;
+}
+
+.col-half-right{
+    grid-column:4 / 7;
+}
+
+.col-third-1{
+    grid-column:1 / 3;
+    justify-self:end;
+}
+
+.col-third-2{
+    grid-column:3 / 5;
+    justify-self:center;
+}
+
+.col-third-3{
+    grid-column:5 / 7;
+    justify-self:start;
+}
+
+.col-third-1,
+.col-third-2,
+.col-third-3{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.col-third-1 .era-cell-label,
+.col-third-2 .era-cell-label,
+.col-third-3 .era-cell-label{
+    align-self:center;
+    text-align:center;
+    margin-bottom:28px;
+}
     .era-cell { display: flex; flex-direction: column; align-items: center; gap: 0; }
     .era-cell-label {
       font-family: var(--serif);
@@ -402,6 +441,57 @@
     @media (max-width: 420px) {
       .feature-item { width: clamp(130px,55vw,200px); }
     }
+/* ================= Footer ================= */
+
+.site-footer {
+    margin-top: 100px; /* 稍微缩减顶部外边距，避免网页断层感过强 */
+    padding: 45px 20px; /* 缩减上下内边距，让内容更紧凑 */
+    border-top: 1px solid #eeeeee; /* 更淡的分割线 */
+    background: #fbfbfb; /* 极淡的灰色背景，既有区分度又不会太显眼 */
+}
+
+.footer-inner {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+/* 标题微调：缩小字号，英文全大写，增加字间距，展现精致的学院风 */
+.footer-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 16px;
+    color: #666; /* 降低黑色的刺眼度 */
+}
+
+/* 核心声明内容：解决“割裂感”和“字太大”的关键 */
+.footer-content p {
+    margin: 6px 0; /* 大幅收紧段落之间的垂直间距 */
+    font-size: 12px; /* 标准页脚字号，精致、低调 */
+    line-height: 1.6;
+    color: #888; /* 柔和的灰色 */
+}
+
+/* 特别补充的辅助说明，字号可以更小一些 */
+.footer-license {
+    font-size: 11.5px;
+    color: #999;
+}
+
+/* 给超链接加上优雅的样式，证明你关注了版权出处 */
+.footer-content a {
+    color: #555;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+
+.footer-content a:hover {
+    color: #000; /* 悬浮时变黑，提供视觉反馈 */
+}
+
   </style>
 
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.74/build/spline-viewer.js"></script>
@@ -632,572 +722,219 @@
 
     <div class="era-grid">
 
-      <!-- ══ ROW 1: 1991–1995 ══ -->
-      <div class="era-cell span-full">
+       <!-- ══ ROW 1 LEFT: 1991–1995 ══ -->
+      <div class="era-cell col-half-left">
         <div class="era-cell-label">1991 – 1995</div>
         <div class="flower-row">
-
           <div class="feature-item lift-40">
             <div class="flower-detail">
-              <div class="detail-title">水手 · 鄭智化<span>1992</span></div>
+              <div class="detail-title">漂洋過海來看你<span>1991</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:47.83"><div class="hu-pct">47.83%</div><div class="hu-seg-bar" style="background:#6dc8d8"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:27.61"><div class="hu-pct">27.61%</div><div class="hu-seg-bar" style="background:#8dd5e1"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.35"><div class="hu-pct">19.35%</div><div class="hu-seg-bar" style="background:#7acddc"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:5.22"><div class="hu-pct">5.22%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
-             <div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:60%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#d8a0be; font-weight:700; line-height:1.2;">+1</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #d8a0be;
-            margin-top:1px;"></div>
-        </div>
-      </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:60%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:39.69"><div class="hu-pct">39.69%</div><div class="hu-seg-bar" style="background:#7bc6d4"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:35.50"><div class="hu-pct">35.50%</div><div class="hu-seg-bar" style="background:#4ebbcf"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:17.56"><div class="hu-pct">17.56%</div><div class="hu-seg-bar" style="background:#bfd7db"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:7.25"><div class="hu-pct">7.25%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:10%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#358aba;font-weight:700;line-height:1.2;">−4</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #358aba;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:10%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
               </div>
-              <div class="detail-quote">「這點痛算什麽，擦乾淚不要怕」</div>
-              <div class="detail-note">Negative lexical values coexist with a positive overall direction.</div>
+              <div class="detail-quote">「也曾彼此安慰，也曾相擁嘆息」</div>
+              <div class="detail-note">Mildly elevated pursed vowels, while the overall sentiment remains strongly negative.</div>
             </div>
-            <div class="feature-flower" data-flower><img src="shuishou.png" alt="水手"></div>
+            <div class="feature-flower" data-flower><img src="piaoyang.png" alt="漂洋過海來看你"></div>
             <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">水手 · 鄭智化</div><div class="pill-year">1992</div></div>
-              <button class="play-btn" data-src="shuishou.mp3" aria-label="Play 水手"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+              <div class="flower-pill"><div class="pill-title">漂洋過海來看你</div><div class="pill-year">1991</div></div>
+              <button class="play-btn" data-src="piaoyang.m4a" aria-label="Play 漂洋過海來看你"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
             </div>
           </div>
-
-          <div class="feature-item lift-0">
-            <div class="flower-detail">
-              <div class="detail-title">風中有朵雨做的雲 · 孟庭葦<span>1993</span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:33.44"><div class="hu-pct">33.44%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:33.77"><div class="hu-pct">33.77%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.66"><div class="hu-pct">20.66%</div><div class="hu-seg-bar" style="background:#5fc3d5"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:12.13"><div class="hu-pct">12.13%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
-            <div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:40%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#a0cfd8; font-weight:700; line-height:1.2;">−1</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #a0cfd8;
-            margin-top:1px;"></div>
         </div>
       </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:40%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="detail-row"><strong>Signature Lyric</strong></div>
-
-              </div>
-              <div class="detail-quote">「風中有朵雨做的雲，一朵雨做的雲」</div>
-              <div class="detail-note">Compressed phonetic structure; color mapping indicative.</div>
-            </div>
-            <div class="feature-flower" data-flower><img src="fengzhong.png" alt="風中有朵雨做的雲"></div>
-            <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">風中有朵雨做的雲 · 孟庭葦</div><div class="pill-year">1993</div></div>
-              <button class="play-btn" data-src="fengzhong.mp3" aria-label="Play 風中有朵雨做的雲"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
-            </div>
-          </div>
-
-          <div class="feature-item lift-20">
-            <div class="flower-detail">
-              <div class="detail-title">小芳 · 李春波<span>1993</span></div>
-              <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:44.52"><div class="hu-pct">44.52%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:30.97"><div class="hu-pct">30.97%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:24.52"><div class="hu-pct">24.52%</div><div class="hu-seg-bar" style="background:#e494be"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:0"><div class="hu-seg-bar" style="background:#dedede"></div></div></div></div>
-            <div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:80%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#cc407a; font-weight:700; line-height:1.2;">+3</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #cc407a;
-            margin-top:1px;"></div>
-        </div>
-      </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:80%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>
-
-              </div>
-              <div class="detail-quote">「村裡有個姑娘叫小芳，長得好看又善良」</div>
-              <div class="detail-note">Positive sentiment aligns with open-vowel dominance; no pursed vowels.</div>
-            </div>
-            <div class="feature-flower" data-flower><img src="xiaofang.png" alt="小芳"></div>
-            <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">小芳 · 李春波</div><div class="pill-year">1993</div></div>
-              <button class="play-btn" data-src="xiaofang.mp3" aria-label="Play 小芳"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- ══ ROW 2 LEFT: 1996–2000 ══ -->
-      <div class="era-cell">
+ 
+      <!-- ══ ROW 1 RIGHT: 1996–2000 ══ -->
+      <div class="era-cell col-half-right">
         <div class="era-cell-label">1996 – 2000</div>
         <div class="flower-row">
           <div class="feature-item lift-20">
             <div class="flower-detail">
-              <div class="detail-title">獨角戲 · 許茹芸<span>1996</span></div>
+              <div class="detail-title">勇氣<span>2000</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:28.29"><div class="hu-pct">28.29%</div><div class="hu-seg-bar" style="background:#6dc8d8"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:46.86"><div class="hu-pct">46.86%</div><div class="hu-seg-bar" style="background:#b0e2e9"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.29"><div class="hu-pct">20.29%</div><div class="hu-seg-bar" style="background:#5fc3d5"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:4.57"><div class="hu-pct">4.57%</div><div class="hu-seg-bar" style="background:#3387bb"></div><div class="hu-name">Pursed</div></div></div></div>
-            <div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:10%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#358aba; font-weight:700; line-height:1.2;">−4</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #358aba;
-            margin-top:1px;"></div>
-        </div>
-      </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:10%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:32.01"><div class="hu-pct">32.01%</div><div class="hu-seg-bar" style="background:#bfd7db"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:42.21"><div class="hu-pct">42.21%</div><div class="hu-seg-bar" style="background:#d46fa4"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:16.71"><div class="hu-pct">16.71%</div><div class="hu-seg-bar" style="background:#c9d9dc"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:9.07"><div class="hu-pct">9.07%</div><div class="hu-seg-bar" style="background:#cc407a"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:80%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#cc407a;font-weight:700;line-height:1.2;">+3</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #cc407a;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:80%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
               </div>
-              <div class="detail-quote">「自始至終全是你」</div>
-              <div class="detail-note">Even vowels dominate; emotional values negative across all groups.</div>
+              <div class="detail-quote">「只要你一個眼神肯定，我的愛就有意義」</div>
+              <div class="detail-note">Even-led structure with a noticeable pursed presence, maintaining a positive overall direction.</div>
             </div>
-            <div class="feature-flower" data-flower><img src="dujiaoxi.png" alt="獨角戲"></div>
+            <div class="feature-flower" data-flower><img src="yongqi.png" alt="勇氣"></div>
             <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">獨角戲 · 許茹芸</div><div class="pill-year">1996</div></div>
-              <button class="play-btn" data-src="dujiaoxi.mp3" aria-label="Play 獨角戲"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+              <div class="flower-pill"><div class="pill-title">勇氣</div><div class="pill-year">2000</div></div>
+              <button class="play-btn" data-src="yongqi.m4a" aria-label="Play 勇氣"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- ══ ROW 2 RIGHT: 2001–2005 ══ -->
-      <div class="era-cell">
+ 
+      <!-- ══ ROW 2 LEFT: 2001–2005 ══ -->
+      <div class="era-cell col-half-left">
         <div class="era-cell-label">2001 – 2005</div>
+        <div class="flower-row">
+          <div class="feature-item lift-20">
+            <div class="flower-detail">
+              <div class="detail-title">十年<span>2003</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:39.80"><div class="hu-pct">39.80%</div><div class="hu-seg-bar" style="background:#a7d1d8"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:38.44"><div class="hu-pct">38.44%</div><div class="hu-seg-bar" style="background:#b5d4da"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.73"><div class="hu-pct">19.73%</div><div class="hu-seg-bar" style="background:#cc407a"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:2.04"><div class="hu-pct">2.04%</div><div class="hu-seg-bar" style="background:#cc407a"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:20%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#3fa9c7;font-weight:700;line-height:1.2;">-3</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #3fa9c7;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:20%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
+              </div>
+              <div class="detail-quote">「一邊享受，一邊淚流」</div>
+              <div class="detail-note">A warm-toned closed and pursed vowel presence contrasts with a predominantly negative overall sentiment.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="shinian.png" alt="十年"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">十年</div><div class="pill-year">2003</div></div>
+              <button class="play-btn" data-src="shinian.m4a" aria-label="Play 十年"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- ══ ROW 2 RIGHT: 2001–2005 ══ -->
+      <div class="era-cell col-half-right">
+        <div class="era-cell-label">&nbsp;</div>
         <div class="flower-row">
           <div class="feature-item lift-0">
             <div class="flower-detail">
-              <div class="detail-title">LYDIA · F.I.R<span>2004</span></div>
+              <div class="detail-title">七里香<span>2004</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:46.39"><div class="hu-pct">46.39%</div><div class="hu-seg-bar" style="background:#76ccdb"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:32.99"><div class="hu-pct">32.99%</div><div class="hu-seg-bar" style="background:#c0e9ef"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:15.98"><div class="hu-pct">15.98%</div><div class="hu-seg-bar" style="background:#b0e2e9"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:4.64"><div class="hu-pct">4.64%</div><div class="hu-seg-bar" style="background:#d75f9d"></div><div class="hu-name">Pursed</div></div></div></div>
-            
-<div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:60%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#d8a0be; font-weight:700; line-height:1.2;">+1</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #d8a0be;
-            margin-top:1px;"></div>
-        </div>
-      </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:60%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>              </div>
-              <div class="detail-quote">「生命總不會只充滿悲傷」</div>
-              <div class="detail-note">Open-dominant; song's later turn shifts direction to positive.</div>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:32.51"><div class="hu-pct">32.51%</div><div class="hu-seg-bar" style="background:#d688b1"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:40.89"><div class="hu-pct">40.89%</div><div class="hu-seg-bar" style="background:#d14e92"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:18.97"><div class="hu-pct">18.97%</div><div class="hu-seg-bar" style="background:#d682ad"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:7.64"><div class="hu-pct">7.64%</div><div class="hu-seg-bar" style="background:#cc407a"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:90%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#c53755;font-weight:700;line-height:1.2;">+4</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #c53755;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:90%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
+              </div>
+              <div class="detail-quote">「雨下整夜，我的愛溢出就像雨水」</div>
+              <div class="detail-note">All vowel groups exhibit strongly positive sentiment, leading to a consistently positive overall direction.</div>
             </div>
-            <div class="feature-flower" data-flower><img src="lydia.png" alt="LYDIA"></div>
+            <div class="feature-flower" data-flower><img src="qilixiang.png" alt="七里香"></div>
             <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">LYDIA · F.I.R</div><div class="pill-year">2004</div></div>
-              <button class="play-btn" data-src="lydia.mp3" aria-label="Play LYDIA"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+              <div class="flower-pill"><div class="pill-title">七里香</div><div class="pill-year">2004</div></div>
+              <button class="play-btn" data-src="qilixiang.m4a" aria-label="Play 七里香"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- ══ ROW 3 LEFT: 2006–2010 ══ -->
-      <div class="era-cell">
+ 
+           <!-- ══ ROW 3 LEFT: 2006–2010 ══ -->
+      <div class="era-cell col-half-left">
         <div class="era-cell-label">2006 – 2010</div>
         <div class="flower-row">
           <div class="feature-item lift-40">
             <div class="flower-detail">
-              <div class="detail-title">日不落 · 蔡依林<span>2007</span></div>
+              <div class="detail-title">今天你要嫁給我<span>2006</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:29.69"><div class="hu-pct">29.69%</div><div class="hu-seg-bar" style="background:#e494be"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:48.45"><div class="hu-pct">48.45%</div><div class="hu-seg-bar" style="background:#e38fba"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.00"><div class="hu-pct">20.00%</div><div class="hu-seg-bar" style="background:#ebb0cd"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:1.86"><div class="hu-pct">1.86%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name"></div></div></div></div>
-            
-<div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:90%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#c53755; font-weight:700; line-height:1.2;">+4</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #c53755;
-            margin-top:1px;"></div>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:38.99"><div class="hu-pct">38.99%</div><div class="hu-seg-bar" style="background:#daaec5"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:40.14"><div class="hu-pct">40.14%</div><div class="hu-seg-bar" style="background:#dab7c9"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.04"><div class="hu-pct">19.04%</div><div class="hu-seg-bar" style="background:#d796b8"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:1.83"><div class="hu-pct">1.83%</div><div class="hu-seg-bar" style="background:#cc407a"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:100%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#bd2f2f;font-weight:700;line-height:1.2;">+5</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #bd2f2f;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:100%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
+              </div>
+              <div class="detail-quote">「手牵手，跟我一起走，过著安定的生活」</div>
+              <div class="detail-note">Balanced open and even vowels with a minimal pursed presence, while the overall sentiment remains strongly positive.</div>
+            </div>
+            <div class="feature-flower" data-flower><img src="jintian.png" alt="今天你要嫁給我"></div>
+            <div class="flower-label-wrap">
+              <div class="flower-pill"><div class="pill-title">今天你要嫁給我</div><div class="pill-year">2006</div></div>
+              <button class="play-btn" data-src="jintian.m4a" aria-label="Play 今天你要嫁給我"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:90%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>              </div>
+ 
+      <!-- ══ ROW 3 RIGHT: 2006–2010 ══ -->
+ <div class="era-cell col-half-right">
+<div class="era-cell-label">&nbsp;</div>
+        <div class="flower-row">
+          <div class="feature-item lift-0">
+            <div class="flower-detail">
+              <div class="detail-title">日不落<span>2007</span></div>
+              <div class="detail-row"><strong>Four Hu distribution</strong>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:29.69"><div class="hu-pct">29.69%</div><div class="hu-seg-bar" style="background:#e494be"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:48.45"><div class="hu-pct">48.45%</div><div class="hu-seg-bar" style="background:#e38fba"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:20.00"><div class="hu-pct">20.00%</div><div class="hu-seg-bar" style="background:#ebb0cd"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:1.86"><div class="hu-pct">1.86%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name"></div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:90%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#c53755;font-weight:700;line-height:1.2;">+4</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #c53755;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:90%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
+              </div>
               <div class="detail-quote">「緊牽著心 把世界走遍」</div>
-              <div class="detail-note">Front vowels edge out open; positive sentiment across all groups.</div>
+              <div class="detail-note">Even vowels dominate the phonetic structure; positive sentiment across all groups.</div>
             </div>
             <div class="feature-flower" data-flower><img src="ribuluo.png" alt="日不落"></div>
             <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">日不落 · 蔡依林</div><div class="pill-year">2007</div></div>
-              <button class="play-btn" data-src="ribuluo.mp3" aria-label="Play 日不落"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+              <div class="flower-pill"><div class="pill-title">日不落</div><div class="pill-year">2007</div></div>
+              <button class="play-btn" data-src="ribuluo.m4a" aria-label="Play 日不落"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ══ ROW 3 RIGHT: 2011–2015 ══ -->
-      <div class="era-cell">
+      <!-- ══ ROW 4 LEFT: 2011–2015 ══ -->
+      <div class="era-cell col-third-1">
         <div class="era-cell-label">2011 – 2015</div>
         <div class="flower-row">
           <div class="feature-item lift-0">
             <div class="flower-detail">
-              <div class="detail-title">追夢赤子心 · GALA<span>2011</span></div>
+              <div class="detail-title">演員<span>2015</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:41.44"><div class="hu-pct">41.44%</div><div class="hu-seg-bar" style="background:#a5dde7"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:32.87"><div class="hu-pct">32.87%</div><div class="hu-seg-bar" style="background:#7acddc"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.44"><div class="hu-pct">19.44%</div><div class="hu-seg-bar" style="background:#3595c3"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:6.25"><div class="hu-pct">6.25%</div><div class="hu-seg-bar" style="background:#71cad9"></div><div class="hu-name">Pursed</div></div></div></div>
-            
-<div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:90%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#c53755; font-weight:700; line-height:1.2;">+4</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #c53755;
-            margin-top:1px;"></div>
-        </div>
-      </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:90%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:41.44"><div class="hu-pct">41.44%</div><div class="hu-seg-bar" style="background:#d2dbdd"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:32.87"><div class="hu-pct">32.87%</div><div class="hu-seg-bar" style="background:#b5d4da"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:19.44"><div class="hu-pct">19.44%</div><div class="hu-seg-bar" style="background:#42b1cb"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:6.25"><div class="hu-pct">6.25%</div><div class="hu-seg-bar" style="background:#3fa9c7"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:20%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#3fa9c7;font-weight:700;line-height:1.2;">-3</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #3fa9c7;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:20%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
               </div>
-              <div class="detail-quote">「失敗後鬱鬱寡歡，那是懦夫的表現」</div>
-              <div class="detail-note">Negative lexical values reinforce resilience; overall direction strongly positive.</div>
+              <div class="detail-quote">「我該變成什麼樣子才能延緩厭倦」</div>
+              <div class="detail-note">Open-dominant structure with moderate even support, while closed and pursed vowels reflect the sentiment score.</div>
             </div>
-            <div class="feature-flower" data-flower><img src="zhuimeng.png" alt="追夢赤子心"></div>
+            <div class="feature-flower" data-flower><img src="yanyuan.png" alt="演員"></div>
             <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">追夢赤子心 · GALA</div><div class="pill-year">2011</div></div>
-              <button class="play-btn" data-src="zhuimeng.mp3" aria-label="Play 追夢赤子心"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+              <div class="flower-pill"><div class="pill-title">演員</div><div class="pill-year">2015</div></div>
+              <button class="play-btn" data-src="yanyuan.m4a" aria-label="Play 演員"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- ══ ROW 4 LEFT: 2016–2020 ══ -->
-      <div class="era-cell">
+ 
+      <!-- ══ ROW 4 CENTER: 2016–2020 ══ -->
+      <div class="era-cell col-third-2">
+<div class="era-cell-label">&nbsp;</div>
+<div class="era-cell-label">&nbsp;</div>
         <div class="era-cell-label">2016 – 2020</div>
         <div class="flower-row">
           <div class="feature-item lift-20">
             <div class="flower-detail">
-              <div class="detail-title">怪美的 · 蔡依林<span>2018</span></div>
+              <div class="detail-title">告白氣球<span>2016</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:42.12"><div class="hu-pct">42.12%</div><div class="hu-seg-bar" style="background:#83d1de"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:21.58"><div class="hu-pct">21.58%</div><div class="hu-seg-bar" style="background:#95d8e3"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:32.53"><div class="hu-pct">32.53%</div><div class="hu-seg-bar" style="background:#42b4cd"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:3.77"><div class="hu-pct">3.77%</div><div class="hu-seg-bar" style="background:#dedede"></div><div class="hu-name">Pursed</div></div></div></div>
-            
-<div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:70%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#d3639d; font-weight:700; line-height:1.2;">+2</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #d3639d;
-            margin-top:1px;"></div>
-        </div>
-      </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:70%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>              </div>
-              <div class="detail-quote">「錯的對的，說美的醜的，怪美的」</div>
-              <div class="detail-note">High closed-vowel proportion; oppositional wording with positive song-level direction.</div>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:36.93"><div class="hu-pct">36.93%</div><div class="hu-seg-bar" style="background:#d9a9c2"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:41.50"><div class="hu-pct">41.50%</div><div class="hu-seg-bar" style="background:#cf4389"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:16.99"><div class="hu-pct">16.99%</div><div class="hu-seg-bar" style="background:#cc407a"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:4.58"><div class="hu-pct">4.58%</div><div class="hu-seg-bar" style="background:#cc407a"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:90%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#c53755;font-weight:700;line-height:1.2;">+4</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #c53755;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:90%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
+              </div>
+              <div class="detail-quote">「親愛的 愛上你 從那天起 甜蜜的很輕易」</div>
+              <div class="detail-note">Open-type vowels dominate the structure, with broadly positive sentiment across vowel groups and a strongly positive overall emotion.</div>
             </div>
-            <div class="feature-flower" data-flower><img src="guaimeide.png" alt="怪美的"></div>
+            <div class="feature-flower" data-flower><img src="gaobai.png" alt="告白氣球"></div>
             <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">怪美的 · 蔡依林</div><div class="pill-year">2018</div></div>
-              <button class="play-btn" data-src="guaimeide.mp3" aria-label="Play 怪美的"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+              <div class="flower-pill"><div class="pill-title">告白氣球</div><div class="pill-year">2016</div></div>
+              <button class="play-btn" data-src="gaobai.m4a" aria-label="Play 告白氣球"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
             </div>
           </div>
         </div>
       </div>
-
+ 
       <!-- ══ ROW 4 RIGHT: 2021–2025 ══ -->
-      <div class="era-cell">
+      <div class="era-cell col-third-3">
         <div class="era-cell-label">2021 – 2025</div>
         <div class="flower-row">
           <div class="feature-item lift-40">
             <div class="flower-detail">
-              <div class="detail-title">可能 · 程響<span>2022</span></div>
+              <div class="detail-title">時光背面的我<span>2021</span></div>
               <div class="detail-row"><strong>Four Hu distribution</strong>
-                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:52.79"><div class="hu-pct">52.79%</div><div class="hu-seg-bar" style="background:#eaabcc"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:29.89"><div class="hu-pct">29.89%</div><div class="hu-seg-bar" style="background:#df7db0"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:13.69"><div class="hu-pct">13.69%</div><div class="hu-seg-bar" style="background:#ecb3d0"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:3.63"><div class="hu-pct">3.63%</div><div class="hu-seg-bar" style="background:#cf3e77"></div><div class="hu-name">Pursed</div></div></div></div>
-            
-<div class="sentiment-legend-wrap">
-  <div class="sentiment-gradient-group">
-    <div style="display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;">
-
-      <div></div>
-      <div style="position:relative; height:18px;">
-        <div style="
-          position:absolute; left:70%; top:0;
-          transform:translateX(-50%);
-          display:flex; flex-direction:column; align-items:center;
-          pointer-events:none; z-index:4;
-        ">
-          <span style="font-size:9px; color:#d3639d; font-weight:700; line-height:1.2;">+2</span>
-          <div style="width:0;height:0;
-            border-left:4px solid transparent;
-            border-right:4px solid transparent;
-            border-top:7px solid #d3639d;
-            margin-top:1px;"></div>
-        </div>
-      </div>
-
-      <div style="white-space:nowrap;"><strong>Sentiment score</strong></div>
-      <div style="position:relative;">
-        <div style="
-          position:absolute; left:70%; top:0;
-          transform:translateX(-50%);
-          width:1.5px; height:100%;
-          background:black; z-index:3;
-          pointer-events:none;
-        "></div>
-        <div class="sentiment-gradient-bar"></div>
-      </div>
-
-      <div></div>
-      <div class="sentiment-gradient-labels">
-        <span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span>
-      </div>
-
-    </div>
-  </div>
-</div>
-            <div class="detail-row"><strong>Signature Lyric</strong></div>
+                <div class="hu-bar-wrap"><div class="hu-cols"><div class="hu-col" style="flex:25.83"><div class="hu-pct">25.83%</div><div class="hu-seg-bar" style="background:#dab0c6"></div><div class="hu-name">Open</div></div><div class="hu-col" style="flex:45.63"><div class="hu-pct">45.63%</div><div class="hu-seg-bar" style="background:#c9d9dc"></div><div class="hu-name">Even</div></div><div class="hu-col" style="flex:22.50"><div class="hu-pct">22.50%</div><div class="hu-seg-bar" style="background:#a0cfd8"></div><div class="hu-name">Closed</div></div><div class="hu-col" style="flex:6.04"><div class="hu-pct">6.04%</div><div class="hu-seg-bar" style="background:#d3639d"></div><div class="hu-name">Pursed</div></div></div></div>
+              <div class="sentiment-legend-wrap"><div class="sentiment-gradient-group"><div style="display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:10px;"><div></div><div style="position:relative;height:18px;"><div style="position:absolute;left:40%;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:4;"><span style="font-size:9px;color:#a0cfd8;font-weight:700;line-height:1.2;">-1</span><div style="width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid #a0cfd8;margin-top:1px;"></div></div></div><div style="white-space:nowrap;"><strong>Sentiment score</strong></div><div style="position:relative;"><div style="position:absolute;left:40%;top:0;transform:translateX(-50%);width:1.5px;height:100%;background:black;z-index:3;pointer-events:none;"></div><div class="sentiment-gradient-bar"></div></div><div></div><div class="sentiment-gradient-labels"><span>−5</span><span>−2.5</span><span>0</span><span>+2.5</span><span>+5</span></div></div></div></div>
+              <div class="detail-row"><strong>Signature Lyric</strong></div>
               </div>
-              <div class="detail-quote">「可能擁有過夢想，才能叫做青春」</div>
-              <div class="detail-note">Open vowels exceed half the structure; positive sentiment across all groups.</div>
+              <div class="detail-quote">「等思緒萬千撥動琴弦，誰又站在分裂的黑夜」</div>
+              <div class="detail-note">Even vowels structure the distribution, with mixed sentiment across groups. The overall sentiment is slightly negative.</div>
             </div>
-            <div class="feature-flower" data-flower><img src="keneng.png" alt="可能"></div>
+            <div class="feature-flower" data-flower><img src="shiguang.png" alt="時光背面的我"></div>
             <div class="flower-label-wrap">
-              <div class="flower-pill"><div class="pill-title">可能 · 程響</div><div class="pill-year">2022</div></div>
-              <button class="play-btn" data-src="keneng.mp3" aria-label="Play 可能"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
+              <div class="flower-pill"><div class="pill-title">時光背面的我</div><div class="pill-year">2021</div></div>
+              <button class="play-btn" data-src="shiguang.m4a" aria-label="Play 時光背面的我"><svg viewBox="0 0 12 14"><polygon points="1,1 11,7 1,13"/></svg></button>
             </div>
           </div>
         </div>
@@ -1375,4 +1112,30 @@ document.addEventListener('click', e=>{
 });
 </script>
 </body>
+<!-- ================= Acknowledgements ================= -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <h3 class="footer-title">Acknowledgements</h3>
+
+    <div class="footer-content">
+      <p>This project is created solely for academic research and educational purposes.</p>
+      
+      <p>
+        Audio samples used in this website are derived from the 
+        <a href="https://wenet-e2e.github.io/opencpop/" target="_blank" rel="noopener noreferrer">OpenCpop Dataset</a>, 
+        © OpenCpop Team.
+      </p>
+
+      <p class="footer-license">
+        Licensed under 
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer">
+          CC BY-NC-ND 4.0 International
+        </a>. 
+        No commercial use is intended.
+      </p>
+    </div>
+
+  </div>
+</footer>
 </html>
