@@ -358,7 +358,7 @@
       margin-bottom: 6px; padding-bottom: 5px;
       border-bottom: 1px solid rgba(255,255,255,.10); line-height: 1.35;
     }
-    .detail-title span { display: block; font-family: var(--sans); font-size: .62rem; color: rgba(255,255,255,.36); letter-spacing: .6px; margin-top: 2px; }
+    .detail-title span { display: block; font-family: var(--sans); font-size: .62rem; color: rgba(255,255,255,.36); letter-spacing: .4px; margin-top: 2px; }
     .detail-row { font-size: .67rem; color: rgba(255,255,255,.56); line-height: 1.52; margin-bottom: 5px; }
     .detail-row strong { color: rgba(255,255,255,.84); font-weight: 600; }
     .detail-quote { font-style: italic; font-size: .66rem; color: rgba(255,255,255,.48); border-left: 2px solid rgba(255,255,255,.14); padding-left: 7px; margin: 6px 0 5px; line-height: 1.5; }
@@ -492,13 +492,250 @@
     color: #000; /* 悬浮时变黑，提供视觉反馈 */
 }
 
+    /* ================= Standby Overlay ================= */
+    body.standby-active {
+      overflow: hidden;
+    }
+
+    .standby-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .85s ease, visibility 0s linear .85s;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(255,255,255,.96) 0%, rgba(250,245,236,.98) 42%, rgba(244,238,227,1) 72%),
+        linear-gradient(180deg, #f6f1e8 0%, #f3ede1 100%);
+    }
+
+    .standby-overlay.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity .85s ease, visibility 0s;
+    }
+
+    .standby-overlay__sheet {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .standby-scene {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.46) 0%, rgba(255,255,255,0) 36%),
+        radial-gradient(circle at 50% 45%, rgba(198,175,132,.12) 0%, rgba(198,175,132,0) 55%);
+    }
+
+    .standby-scene::before {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background:
+        radial-gradient(circle at 50% 52%, rgba(255,255,255,.74) 0%, rgba(255,255,255,0) 52%),
+        radial-gradient(circle at 50% 50%, rgba(190,171,137,.12) 0%, rgba(190,171,137,0) 60%);
+      filter: blur(16px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .standby-scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,.07), rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(255,255,255,.05)),
+        radial-gradient(circle at 18% 24%, rgba(199,165,121,.04) 0 3px, transparent 4px),
+        radial-gradient(circle at 78% 22%, rgba(199,165,121,.05) 0 4px, transparent 5px),
+        radial-gradient(circle at 25% 74%, rgba(155,174,139,.04) 0 4px, transparent 5px),
+        radial-gradient(circle at 74% 73%, rgba(155,174,139,.04) 0 4px, transparent 5px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .standby-copy {
+      position: relative;
+      z-index: 4;
+      width: min(1180px, 86vw);
+      text-align: center;
+      padding: 15vh 0 13vh;
+    }
+
+    .standby-kicker {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: rgba(95, 101, 86, .34);
+      margin-bottom: 16px;
+    }
+
+    .standby-copy h1 {
+      max-width: 1180px;
+      margin: 0 auto;
+      font-family: var(--serif);
+      font-size: clamp(1.42rem, 2.95vw, 3.15rem);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: .4px;
+      color: var(--sage-green);
+      text-wrap: balance;
+    }
+
+    .standby-copy h1 .accent { color: var(--gold-border); }
+
+    .standby-subtitle {
+      margin-top: 18px;
+      font-size: 13px;
+      letter-spacing: .05em;
+      color: rgba(95, 101, 86, .45);
+    }
+
+    .standby-bloom {
+      position: absolute;
+      z-index: 2;
+      width: clamp(84px, 9vw, 160px);
+      filter: drop-shadow(0 14px 24px rgba(94, 82, 62, .10)) saturate(.88) brightness(1.03) contrast(.98);
+      opacity: .78;
+      transform-origin: center;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    .standby-bloom img {
+      width: 100%;
+      height: auto;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      image-rendering: auto;
+      transform: translateZ(0);
+      filter: blur(.12px);
+    }
+
+    .standby-bloom::after {
+      content: "";
+      position: absolute;
+      inset: 9% 11%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.48), rgba(255,255,255,0) 70%);
+      filter: blur(16px);
+      opacity: .70;
+      z-index: -1;
+    }
+
+    .standby-bloom--tl {
+      left: 6.5%;
+      top: 11.5%;
+      width: clamp(88px, 8.8vw, 154px);
+      animation: standbyDriftA 14s ease-in-out infinite;
+    }
+
+    .standby-bloom--tr {
+      right: 6.5%;
+      top: 9.5%;
+      width: clamp(88px, 9vw, 160px);
+      animation: standbyDriftB 15s ease-in-out infinite;
+    }
+
+    .standby-bloom--bl {
+      left: 29%;
+      bottom: 15%;
+      width: clamp(102px, 10.5vw, 182px);
+      animation: standbyDriftC 13.5s ease-in-out infinite;
+    }
+
+    @keyframes standbyDriftA {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-8deg) scale(1); }
+      50%      { transform: translate3d(0, -10px, 0) rotate(-4deg) scale(1.015); }
+    }
+
+    @keyframes standbyDriftB {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(9deg) scale(1); }
+      50%      { transform: translate3d(0, -8px, 0) rotate(5deg) scale(1.01); }
+    }
+
+    @keyframes standbyDriftC {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(5deg) scale(1); }
+      50%      { transform: translate3d(0, -12px, 0) rotate(2deg) scale(1.02); }
+    }
+
+    .standby-enter {
+      position: absolute;
+      left: 50%;
+      bottom: 40px;
+      transform: translateX(-50%);
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(95, 101, 86, .52);
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(95, 101, 86, .13);
+      background: rgba(255,255,255,.22);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      box-shadow: 0 10px 30px rgba(94, 82, 62, .04);
+    }
+
+    .standby-overlay.is-visible .standby-enter {
+      animation: standbyPulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes standbyPulse {
+      0%, 100% { opacity: .58; transform: translateX(-50%) translateY(0); }
+      50%      { opacity: 1;   transform: translateX(-50%) translateY(-2px); }
+    }
+
   </style>
 
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.74/build/spline-viewer.js"></script>
 </head>
 <body>
 
+
+<!-- ══════════ STANDBY OVERLAY ══════════ -->
+<div id="standbyOverlay" class="standby-overlay" aria-hidden="true">
+  <div class="standby-overlay__sheet">
+    <div class="standby-scene">
+      <div class="standby-bloom standby-bloom--tl">
+        <img src="2001-2005top.png" alt="Preview bloom from 2001 to 2005">
+      </div>
+
+      <div class="standby-bloom standby-bloom--tr">
+        <img src="xingqing.png" alt="Preview bloom for the stand-alone featured piece">
+      </div>
+
+      <div class="standby-bloom standby-bloom--bl">
+        <img src="2021-2025side.png" alt="Preview bloom from 2021 to 2025">
+      </div>
+
+      <div class="standby-copy">
+        <h1>
+          Blooming <span class="accent">Vowels</span>: Visualizing <span class="accent">Four Hu</span><br/>
+          and Emotional Expression in <span class="accent">Mandopop Lyrics</span>
+        </h1>
+      </div>
+
+      <div class="standby-enter">Click anywhere to enter</div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════ HEADER ══════════ -->
+
 <section class="header-section">
 
   <div class="botanical-corner left" aria-hidden="true">
@@ -1110,8 +1347,82 @@ document.addEventListener('click', e=>{
   if(!e.target.closest('.feature-item'))
     document.querySelectorAll('.flower-detail.open').forEach(d=>d.classList.remove('open'));
 });
+
+/* ══ IDLE STANDBY OVERLAY ══ */
+const standbyOverlay = document.getElementById('standbyOverlay');
+let standbyVisible = false;
+let idleTimer = null;
+const IDLE_DELAY = 90000; // 90 seconds
+
+function stopCurrentPlayback(){
+  if(currentAudio){
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+  resetBtn(currentBtn);
+  stopSway(currentFlower);
+  currentAudio = null;
+  currentBtn = null;
+  currentFlower = null;
+}
+
+function closeAllTooltips(){
+  document.querySelectorAll('.flower-detail.open').forEach(d=>d.classList.remove('open'));
+}
+
+function exitStandby(){
+  if(!standbyVisible) return;
+  standbyVisible = false;
+  standbyOverlay.classList.remove('is-visible');
+  document.body.classList.remove('standby-active');
+}
+
+function enterStandby(){
+  if(standbyVisible) return;
+  standbyVisible = true;
+  document.body.classList.add('standby-active');
+  closeAllTooltips();
+  stopCurrentPlayback();
+  if(eraTimer){
+    clearInterval(eraTimer);
+    eraTimer = null;
+    playBtn.innerText = "Play ▶";
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  requestAnimationFrame(()=>{
+    standbyOverlay.classList.add('is-visible');
+  });
+}
+
+function resetIdleTimer(){
+  if(standbyVisible) return;
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(enterStandby, IDLE_DELAY);
+}
+
+standbyOverlay.addEventListener('click', e=>{
+  e.stopPropagation();
+  exitStandby();
+  resetIdleTimer();
+});
+
+document.addEventListener('keydown', e=>{
+  if(standbyVisible){
+    if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' '){
+      exitStandby();
+    }
+    return;
+  }
+  resetIdleTimer();
+});
+
+['pointerdown','mousemove','wheel','touchstart','scroll'].forEach(evt=>{
+  document.addEventListener(evt, resetIdleTimer, { passive: true });
+});
+
+resetIdleTimer();
+
 </script>
-</body>
 <!-- ================= Acknowledgements ================= -->
 <footer class="site-footer">
   <div class="footer-inner">
@@ -1138,4 +1449,5 @@ document.addEventListener('click', e=>{
 
   </div>
 </footer>
+</body>
 </html>
